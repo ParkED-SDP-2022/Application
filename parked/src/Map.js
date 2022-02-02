@@ -6,6 +6,7 @@
  * 
  * TODO: load in and render geojson data
  * TODO: stop from zooming? or havea  reset view button?
+ * TODO: dynamically zoom to data?
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -25,7 +26,7 @@ const Map = () => {
       // See style options here: https://docs.mapbox.com/api/maps/#styles
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [-3.188904, 55.943713],
-      zoom: 17,
+      zoom: 16.5,
     });
 
     // add navigation control (the +/- zoom buttons)
