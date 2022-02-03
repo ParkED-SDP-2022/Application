@@ -36,3 +36,15 @@
     transform: rotate(360deg);
   }
 }
+
+/*
+#####################################
+#######    MAP STYLING       ########
+#####################################
+*/
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+}
