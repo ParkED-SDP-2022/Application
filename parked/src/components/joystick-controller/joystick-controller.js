@@ -22,7 +22,7 @@ export class JoystickController extends React.Component{
     // robot_IP = location.hostname;
     // set robot address statically
     let robot_IP;
-    robot_IP = "http://quilava:11311";
+    robot_IP = "ws://localhost:9090";
 
     // // Init handle for rosbridge_websocket
     // robot ip + port need to be the same as websocket launch
