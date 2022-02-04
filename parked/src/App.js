@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import Map from "./components/map/Map";
 import {Joystick} from "./components/joystick/joystick";
+import { basicController } from './pages/basic-controller/basic-controller';
 
 function App() {
   return (
@@ -20,6 +21,9 @@ function App() {
           Learn React
         </a>
       </header>
+      <basicController>
+
+      </basicController>
     </div>
   );
 }
