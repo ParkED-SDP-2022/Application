@@ -14,8 +14,9 @@
 
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
+import './map.scss';
 
-import './App.css';
+import '../../App.css';
 
 // mapboxgl.accessToken = ; //TODO: access key goes here 
 
