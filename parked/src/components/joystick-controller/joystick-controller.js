@@ -51,9 +51,6 @@ export class JoystickController extends React.Component{
         this.publishImmidiately = true;
       }, 50);
     }
-    else {
-      console.log('publish immidiately is set to false')
-    }
   }
 
   handleStop() {
@@ -72,7 +69,6 @@ export class JoystickController extends React.Component{
     this.ros = new this.ROSLIBR.Ros({
       url: robot_IP
     });
-    console.log(this.ros);
 
     this.initVelocityPublisher();
     this.initOdomTopic();
@@ -104,7 +100,6 @@ export class JoystickController extends React.Component{
   }
 
   moveAction(linear, angular) {
-    console.log(linear, angular)
     if (linear !== undefined && angular !== undefined) {
       this.twist.linear.x = linear;
       this.twist.angular.z = angular;
