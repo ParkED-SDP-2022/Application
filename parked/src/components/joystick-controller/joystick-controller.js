@@ -43,13 +43,13 @@ export class JoystickController extends React.Component{
     const changeY = evt.y;
 
     const linearSpeed = (changeY / this.MAX_JOYSTICK_X_Y) * this.MAX_LINEAR_SPEED;
-    const angularSpeed = (changeX / this.MAX_JOYSTICK_X_Y) * this.MAX_ANGULAR_SPEED;
+    const angularSpeed = - (changeX / this.MAX_JOYSTICK_X_Y) * this.MAX_ANGULAR_SPEED;
     if (this.publishImmidiately) {
       this.publishImmidiately = false;
       this.moveAction(linearSpeed, angularSpeed);
       setTimeout(() => {
         this.publishImmidiately = true;
-      }, 500);
+      }, 50);
     }
     else {
       console.log('publish immidiately is set to false')
