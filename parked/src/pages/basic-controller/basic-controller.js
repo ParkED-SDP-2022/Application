@@ -7,9 +7,10 @@ export class BasicController extends React.Component{
         return(
             <div className='container-fluid'>
               <div className='row d-flex justify-content-center align-items-center'>
-                <div className='col-3 d-flex flex-column justify-content-center align-items-center'>
-                  <p className='display-3'>Joystick</p>
-                  <JoystickController></JoystickController>
+                <div className='col-12 d-flex flex-column justify-content-center align-items-center'>
+                  <p className='display-3'>Bench 1 Controller</p>
+                  <p className='text-info pb-4'>Use the joystick below the move the robot</p>
+                  <JoystickController/>
                 </div>
               </div>
             </div>

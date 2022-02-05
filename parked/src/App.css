@@ -37,14 +37,7 @@
   }
 }
 
-/*
-#####################################
-#######    MAP STYLING       ########
-#####################################
-*/
-
-/* .map-container {
-  position: relative;
-  width: 100%;
-  height: 50vh;
-} */
+.logo {
+    width: 200px;
+    height: 200px;
+}
