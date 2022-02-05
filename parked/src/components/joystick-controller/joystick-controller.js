@@ -3,19 +3,59 @@ import "./joystick-controller.scss"
 import {Joystick} from "react-joystick-component";
 
 export class JoystickController extends React.Component{
-  handleMove;
-  handleStop;
-  x;
+  MAX_LINEAR_SPEED = 2
+  MAX_ANGULAR_SPEED = 2
+  MAX_JOYSTICK_X_Y = 50
+
+  ROSLIBR
+  ros;
+  twist;
+  cmdVel;
+  publishImmidiately = true;
+  robot_IP;
+  manager;
+  teleop;
+  odom;
 
 
   constructor(props) {
     super(props);
-    this.initialize = this.initialize.bind(this);
+    // this.initialize = this.initialize.bind(this);
+    this.handleMove = this.handleMove.bind(this);
+    this.handleStop = this.handleStop.bind(this);
+    // this.initVelocityPublisher = this.initVelocityPublisher.bind(this)
+    // this.moveAction = this.moveAction.bind(this)
     this.ROSLIBR = window.ROSLIB;
   }
 
+  componentDidMount() {
+    this.initialize();
+  }
+
+  // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
+  componentWillUnmount() {
+
+  }
 
 
+  handleMove(evt) {
+    const changeX = evt.x;
+    const changeY = evt.y;
+
+    const linearSpeed = (changeY / this.MAX_JOYSTICK_X_Y) * this.MAX_LINEAR_SPEED;
+    const angularSpeed = (changeX / this.MAX_JOYSTICK_X_Y) * this.MAX_ANGULAR_SPEED;
+    if (this.publishImmidiately) {
+      this.publishImmidiately = false;
+      this.moveAction(linearSpeed, angularSpeed);
+      setTimeout(() => {
+        this.publishImmidiately = true;
+      }, 50);
+    }
+  }
+
+  handleStop() {
+    this.moveAction(0, 0);
+  }
 
   initialize() {
     // determine robot address automatically
@@ -26,14 +66,72 @@ export class JoystickController extends React.Component{
 
     // // Init handle for rosbridge_websocket
     // robot ip + port need to be the same as websocket launch
-    let ros;
-    ros = new this.ROSLIBR.Ros({
+    this.ros = new this.ROSLIBR.Ros({
       url: robot_IP
     });
-    console.log(ros);
+    console.log(this.ros);
 
-    // initVelocityPublisher();
+    this.initVelocityPublisher();
+    this.initOdomTopic();
   }
+
+  initVelocityPublisher() {
+    // Init message with zero values.
+    this.twist = new this.ROSLIBR.Message({
+      linear: {
+        x: 0,
+        y: 0,
+        z: 0
+      },
+      angular: {
+        x: 0,
+        y: 0,
+        z: 0
+      }
+    });
+
+    // Init topic object
+    this.cmdVel = new this.ROSLIBR.Topic({
+      ros: this.ros,
+      name: '/cmd_vel',
+      messageType: 'geometry_msgs/Twist'
+    });
+    // Register publisher within ROS system
+    this.cmdVel.advertise();
+  }
+
+  moveAction(linear, angular) {
+    if (linear !== undefined && angular !== undefined) {
+      this.twist.linear.x = linear;
+      this.twist.angular.z = angular;
+    } else {
+      this.twist.linear.x = 0;
+      this.twist.angular.z = 0;
+    }
+    this.cmdVel.publish(this.twist);
+  }
+
+  parseMessage(message){
+    console.log('Received message on ' + this.odom.name + ': x:' + message.pose.pose.position.x + ' y:' + message.pose.pose.position.y);
+    this.odom.unsubscribe();
+  }
+  odomCall(){
+    this.odom.subscribe(this.parseMessage);
+
+  }
+
+  initOdomTopic(){
+    // Init topic object
+    this.odom = new this.ROSLIBR.Topic({
+      ros: this.ros,
+      name: '/odom',
+      messageType: 'nav_msgs/Odometry'
+    });
+
+    this.odom.advertise();
+  }
+
+
 
   render() {
         return (
@@ -45,49 +143,13 @@ export class JoystickController extends React.Component{
                   move={this.handleMove}
                   stop={this.handleStop}
                 />
-              <button className='btn btn-primary' onClick={this.initialize}>asdasd</button>
             </>
         );
     }
 }
 
-// function moveAction(linear, angular) {
-//     if (linear !== undefined && angular !== undefined) {
-//         twist.linear.x = linear;
-//         twist.angular.z = angular;
-//     } else {
-//         twist.linear.x = 0;
-//         twist.angular.z = 0;
-//     }
-//     cmdVel.publish(twist);
-// }
-//
-// function initVelocityPublisher() {
-//     // Init message with zero values.
-//   let twist;
-//   twist = new ROSLIB.Message({
-//         linear: {
-//             x: 0,
-//             y: 0,
-//             z: 0
-//         },
-//         angular: {
-//             x: 0,
-//             y: 0,
-//             z: 0
-//         }
-//     });
-//
-//     // Init topic object
-//   let cmdVel;
-//   cmdVel = new ROSLIB.Topic({
-//     ros: ros,
-//     name: '/cmd_vel',
-//     messageType: 'geometry_msgs/Twist'
-//     });
-//     // Register publisher within ROS system
-//     cmdVel.advertise();
-//     }
-//
-//
+
+
+
+
 

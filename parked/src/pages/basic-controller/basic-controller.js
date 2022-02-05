@@ -7,8 +7,8 @@ export class BasicController extends React.Component{
         return(
             <div className='container-fluid'>
               <div className='row d-flex justify-content-center align-items-center'>
-                <div className='col-3 d-flex flex-row justify-content-center align-items-center'>
-                  <h1>Joystick</h1>
+                <div className='col-3 d-flex flex-column justify-content-center align-items-center'>
+                  <p className='display-3'>Joystick</p>
                   <JoystickController></JoystickController>
                 </div>
               </div>
