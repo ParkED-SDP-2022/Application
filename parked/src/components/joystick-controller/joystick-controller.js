@@ -49,7 +49,10 @@ export class JoystickController extends React.Component{
       this.moveAction(linearSpeed, angularSpeed);
       setTimeout(() => {
         this.publishImmidiately = true;
-      }, 50);
+      }, 500);
+    }
+    else {
+      console.log('publish immidiately is set to false')
     }
   }
 
@@ -101,6 +104,7 @@ export class JoystickController extends React.Component{
   }
 
   moveAction(linear, angular) {
+    console.log(linear, angular)
     if (linear !== undefined && angular !== undefined) {
       this.twist.linear.x = linear;
       this.twist.angular.z = angular;
