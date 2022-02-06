@@ -137,8 +137,8 @@ export class JoystickController extends React.Component{
             <>
                 <Joystick
                   size={100}
-                  baseColor="red"
-                  stickColor="blue"
+                  baseColor="green"
+                  stickColor="darkgreen"
                   move={this.handleMove}
                   stop={this.handleStop}
                 />
