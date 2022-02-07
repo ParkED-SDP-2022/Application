@@ -1,7 +1,8 @@
 import React from "react";
 import "./basic-controller.scss";
 import { JoystickController } from "../../components/joystick-controller/joystick-controller";
-import testMap from "../../assets/map/testmap.jpg"
+import testMap from "../../assets/map/test.geojson"
+import Map from "../../components/map/Map"
 
 export class BasicController extends React.Component{
     render() {
@@ -15,7 +16,7 @@ export class BasicController extends React.Component{
               <div className='div1 row'>
                 <div className='col-8 d-flex flex-column justify-content-start align-items-center'>
                   <h3 className='mb-4'>Map of Park</h3>
-                  <img src={testMap} alt="test image of map"/>
+                  <Map parkBoundaries={testMap} />
                 </div>
               <div className='col-4 d-flex flex-column justify-content-center align-items-center'>
                 <h3 className='mb-4' >Joystick Controller</h3>

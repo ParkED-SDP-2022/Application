@@ -18,9 +18,9 @@ import './map.scss';
 
 import '../../App.css';
 
-// mapboxgl.accessToken = ; //TODO: access key goes here 
+mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
-const Map = () => {
+const Map = ( { parkBoundaries } ) => {
   const mapContainerRef = useRef(null);
 
   // initialize map when component mounts
@@ -30,14 +30,14 @@ const Map = () => {
       style: 'mapbox://styles/mapbox/streets-v11',
       //west-end of the meadows
       center: [-3.197310, 55.941542],
-      zoom: 16,
-      interactive: false
+      zoom: 15,
+      interactive: true
     });
 
     map.on('load', () => {
       map.addSource('park', {
         'type': 'geojson',
-        'data': 'test.geojson' //test file of boundaries
+        'data': parkBoundaries //test file of boundaries
         });
 
       // Add a map layer for each type of geometry
