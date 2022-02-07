@@ -15,6 +15,7 @@
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import './map.scss';
+import extent from '@turf/turf'
 
 import '../../App.css';
 
@@ -30,7 +31,7 @@ const Map = ( { parkBoundaries } ) => {
       style: 'mapbox://styles/mapbox/streets-v11',
       //west-end of the meadows
       center: [-3.197310, 55.941542],
-      zoom: 15,
+      zoom: 17,
       interactive: true
     });
 
@@ -60,7 +61,25 @@ const Map = ( { parkBoundaries } ) => {
         'filter': ['==', '$type', 'LineString']
       });
     });
+    
+    //var bbox = extent(parkBoundaries);
+    //map.fitBounds(bbox, {padding: 20});
+  
+
+    //map.fitBounds(bbox(map.getSource('park')._data), {padding: 20});
       
+    // map.on('sourcedata', function (e) {
+    //   if (e.sourceId !== 'park' || !e.isSourceLoaded) return
+    //   var f = map.querySourceFeatures('park')
+    //   if (f.length === 0) return
+    //   var bbox = bbox({
+    //     type: 'FeatureCollection',
+    //     features: f
+    //   });
+
+    //   map.fitBounds(bbox(), {padding: 20});    
+    // })
+
 
     // clean up on unmount
     return () => map.remove();
