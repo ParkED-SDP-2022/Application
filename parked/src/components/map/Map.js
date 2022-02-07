@@ -34,6 +34,9 @@ const Map = ( { parkBoundaries } ) => {
       interactive: true
     });
 
+    // add navigation control (the +/- zoom buttons)
+    map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+    
     map.on('load', () => {
       map.addSource('park', {
         'type': 'geojson',
