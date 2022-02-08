@@ -19,7 +19,6 @@ export class BasicController extends React.Component{
                   <Map parkBoundaries={testMap} />
                 </div>
               <div className='col-4 d-flex flex-column justify-content-center align-items-center'>
-                <h3 className='mb-4' >Joystick Controller</h3>
                 <div className='mt-3'>
                   <JoystickController/>
                 </div>
