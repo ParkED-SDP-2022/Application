@@ -3,11 +3,12 @@ import "./joystick-controller.scss"
 import {Joystick} from "react-joystick-component";
 
 export class JoystickController extends React.Component{
-  MAX_LINEAR_SPEED = 2
-  MAX_ANGULAR_SPEED = 2
+  MAX_LINEAR_SPEED = 0.26
+  MAX_ANGULAR_SPEED = 1.82
   MAX_JOYSTICK_X_Y = 50
 
   ROSLIBR
+  KEYBOARDTELEOP
   ros;
   twist;
   cmdVel;
@@ -20,12 +21,18 @@ export class JoystickController extends React.Component{
 
   constructor(props) {
     super(props);
+    this.state = {
+      showJoyStick: true
+    }
+
     // this.initialize = this.initialize.bind(this);
     this.handleMove = this.handleMove.bind(this);
     this.handleStop = this.handleStop.bind(this);
+    this.toggleJoystick = this.toggleJoystick.bind(this);
     // this.initVelocityPublisher = this.initVelocityPublisher.bind(this)
     // this.moveAction = this.moveAction.bind(this)
     this.ROSLIBR = window.ROSLIB;
+    this.KEYBOARDTELEOP = window.KEYBOARDTELEOP
   }
 
   componentDidMount() {
@@ -62,7 +69,7 @@ export class JoystickController extends React.Component{
     // robot_IP = location.hostname;
     // set robot address statically
     let robot_IP;
-    robot_IP = "ws://localhost:9090";
+        robot_IP = "ws://localhost:9090";
 
     // // Init handle for rosbridge_websocket
     // robot ip + port need to be the same as websocket launch
@@ -71,6 +78,7 @@ export class JoystickController extends React.Component{
     });
 
     this.initVelocityPublisher();
+    this.initTeleopKeyboard();
     this.initOdomTopic();
   }
 
@@ -97,6 +105,25 @@ export class JoystickController extends React.Component{
     });
     // Register publisher within ROS system
     this.cmdVel.advertise();
+  }
+
+  initTeleopKeyboard() {
+    // Use w, s, a, d keys to drive your robot
+
+    // Check if keyboard controller was aready created
+    if (this.teleop == null) {
+      // Initialize the teleop.
+      this.teleop = new this.KEYBOARDTELEOP.Teleop({
+        ros: this.ros,
+        topic: '/cmd_vel'
+      });
+    }
+
+    // Add event listener for slider moves
+    const robotSpeedRange = this.MAX_LINEAR_SPEED;
+    // robotSpeedRange.oninput = function () {
+    //   this.teleop.scale = robotSpeedRange.value / 100
+    // }
   }
 
   moveAction(linear, angular) {
@@ -130,11 +157,18 @@ export class JoystickController extends React.Component{
     this.odom.advertise();
   }
 
+  toggleJoystick() {
+    this.setState({showJoyStick: !this.state.showJoyStick});
+    console.log(this.state)
+  }
+
 
 
   render() {
         return (
-            <>
+            <div className='d-flex flex-column justify-content-center align-items-center'>
+              {this.state.showJoyStick && <div className='mb-4 d-flex flex-column justify-content-center align-items-center'>
+                <p className='display-6 mb-5' >Joystick</p>
                 <Joystick
                   size={100}
                   baseColor="green"
@@ -142,7 +176,16 @@ export class JoystickController extends React.Component{
                   move={this.handleMove}
                   stop={this.handleStop}
                 />
-            </>
+              </div>}
+              {!this.state.showJoyStick && <p
+                className='display-4'>
+                Use w, a, s, d on your keyboard to control the robot
+              </p> }
+              <button className='btn btn-primary' onClick={this.toggleJoystick}>
+                {this.state.showJoyStick && "Hide Joystick"}
+                {!this.state.showJoyStick && "Show Joystick"}
+              </button>
+            </div>
         );
     }
 }
