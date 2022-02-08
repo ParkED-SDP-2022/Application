@@ -20,6 +20,8 @@ import '../../App.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
+
+
 const Map = ( { parkBoundaries } ) => {
   const mapContainerRef = useRef(null);
 
@@ -38,12 +40,37 @@ const Map = ( { parkBoundaries } ) => {
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
     
     map.on('load', () => {
+
+      map.loadImage(
+        'https://docs.mapbox.com/mapbox-gl-js/assets/cat.png',
+        (error, image) => {
+          if (error) throw error;
+
+          // Add the image to the map style.
+          map.addImage('cat', image);
+        });
+
+// Add a data source containing bench's initial location.
+      map.addSource('point', {
+        'type': 'geojson',
+        'data': {
+          'type': 'FeatureCollection',
+          'features': [
+            {
+              'type': 'Feature',
+              'geometry': {
+                'type': 'Point',
+                'coordinates': [-3.1967103481292725, 55.94144352828404]
+              }
+            }
+          ]
+        }
+      });
+
       map.addSource('park', {
         'type': 'geojson',
         'data': parkBoundaries //test file of boundaries
         });
-
-      // Add a map layer for each type of geometry
       map.addLayer({
         'id': 'park-boundary',
         'type': 'line',
@@ -58,6 +85,16 @@ const Map = ( { parkBoundaries } ) => {
           'line-width': 5
           },
         'filter': ['==', '$type', 'LineString']
+      });
+
+      map.addLayer({
+        'id': 'points',
+        'type': 'symbol',
+        'source': 'point', // reference the data source
+        'layout': {
+          'icon-image': 'cat', // reference the image
+          'icon-size': 0.25
+        }
       });
     });
       
