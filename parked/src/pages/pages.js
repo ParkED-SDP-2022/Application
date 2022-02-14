@@ -1,18 +1,43 @@
 import React from "react";
-import { Link, useLocation, Outlet } from "react-router-dom";
+import { BasicController } from "./basic-controller/basic-controller";
+import { Link, useLocation } from "react-router-dom";
+
+
+function Header() {
+    return (
+      <div className='parkedHeader'>
+        <img src={require('../assets/branding/logo.png')} className='logo'/>
+        <nav className="navigationBar">
+          <ul>
+            <li>
+              <Link to="/">Home</Link>
+            </li>
+            <li>
+              <Link to="/about">About</Link>
+            </li>
+            <li>
+              <Link to="/yourbenches">YourBenches</Link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    )
+  }
 
 export function Home() {
     return (
-        <div><h1>Home Page</h1>
-        <nav><Link to="about">About</Link></nav></div>
+        <div>
+            <Header />
+            <h1>Home Page</h1>
+        </div>
     )
 }
 
 export function About() {
     return (
         <div>
+            <Header />
             <h1>About Page</h1>
-            <Outlet />
         </div>
     )
 }
@@ -20,7 +45,8 @@ export function About() {
 export function YourBenches() {
     return (
         <div>
-            <h2>Our Services</h2>
+            <Header />
+            <BasicController/>
         </div>
     )
 }
@@ -30,6 +56,7 @@ export function Whoops404() {
     console.log(location);
     return (
         <div>
+            <Header />
             <h1>
                 Resource not found at {location.pathname}.
             </h1>
