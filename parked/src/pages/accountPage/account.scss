@@ -1,0 +1,33 @@
+/* SCSS RGB */
+$green-pantone: rgba(75, 167, 75, 1);
+$titanium-yellow: rgba(243, 232, 31, 1);
+$gunmetal: rgba(51, 55, 69, 1);
+$cultured: rgba(238, 238, 238, 1);
+$coral: rgba(255, 131, 96, 1);
+
+.AccountPage {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+
+.MapSide {
+    width: 60vw;
+    height: 100vh;
+}
+
+.ControlSide {
+    background-color: $coral; 
+    width: 40vw;
+    height: 100vh;
+    -moz-box-shadow:    15px 15px 15px 5px rgba(0, 0, 0, 0.8);
+    -webkit-box-shadow: 15px 15px 15px 5px rgba(0, 0, 0, 0.8);
+    box-shadow:         15px 15px 15px 5px rgba(0, 0, 0, 0.8);
+}
+
+.map{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+}

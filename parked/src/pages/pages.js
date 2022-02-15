@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./pages.scss";
-import { AboutPage } from "./aboutPage/about";
+import { AccountPage } from "./accountPage/account";
 import { Link, useLocation } from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -83,7 +83,7 @@ export function Account() {
     return (
         <div>
             <Nav />
-            <AboutPage/>
+            <AccountPage/>
         </div>
     )
 }
