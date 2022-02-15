@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import "./pages.scss";
-import { BasicController } from "./basic-controller/basic-controller";
+import { AboutPage } from "./aboutPage/about";
 import { Link, useLocation } from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 
+
+/*
+Source inspiration: https://codepen.io/seyedi/pen/YXEqwB
+*/
 function Nav() {
 
   const [active, setActive] = useState(false);
@@ -34,6 +38,9 @@ export function Home() {
             <div className="logoDiv">
               <img src={require('../assets/branding/logo.png')} className='logo'/>
             </div>
+            <div className="textDiv">
+              <h2>Welcome to the home of the mobile park bench. Where parks can adapt to meet the needs of their users!</h2>
+            </div>
           </div>
           <Nav />
         </div>
@@ -45,10 +52,26 @@ export function About() {
         <div>
           <div className="AboutPage">
             <div className="LeftSide">
-              What we do
             </div>
             <div className="RightSide">
-              Why we do it
+            </div>
+            <div className="TitleDiv">
+              <h1>A Little Bit About Us</h1>
+            </div>
+            
+            <div className="aboutText">
+              <h2>What We Do:</h2>
+              <p>Our benches are designed so that we can optimise people's use of park benches by ensuring benches can be located in the most in-demand locales. However their value can extend to town squares, campuses, large fairs and expos.</p>
+              <p>Our mobile benches can be programmed to move to set locations around the park where ther is more need. For example:
+                <ul>
+                  <li>In summer benches may be placed in the sun</li>
+                  <li>In winter benches may be moved to the shelter</li>
+                  <li>Benches can gather around a farmer's market which only runs once a week</li>
+                  <li>Benches can organise in formations for outdoor events such as concerts, weddings, parades, etc.</li>
+                </ul>
+              </p>
+              <p>Through our user interface the owner of a fleet of benches can track where they are and reassign them to new locations. The benches can then navigate to their newly assigned spots.</p>
+              <p>The bench system tracks and stores bench usage statistics so you can get a better idea of the most in-demand areas on different days/seasons.</p>
             </div>
           </div>
             <Nav />
@@ -60,7 +83,7 @@ export function Account() {
     return (
         <div>
             <Nav />
-            <BasicController/>
+            <AboutPage/>
         </div>
     )
 }
