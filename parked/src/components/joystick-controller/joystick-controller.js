@@ -177,11 +177,10 @@ export class JoystickController extends React.Component{
                   stop={this.handleStop}
                 />
               </div>}
-              {!this.state.showJoyStick && <p
-                className='display-4'>
+              {!this.state.showJoyStick && <p className="ArrowKeyText">
                 Use w, a, s, d on your keyboard to control the robot
               </p> }
-              <button className='btn btn-primary' onClick={this.toggleJoystick}>
+              <button className='green_button' onClick={this.toggleJoystick}>
                 {this.state.showJoyStick && "Hide Joystick"}
                 {!this.state.showJoyStick && "Show Joystick"}
               </button>

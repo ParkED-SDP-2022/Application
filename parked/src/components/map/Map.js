@@ -72,18 +72,7 @@ const Map = ( { parkBoundaries, benches } ) => {
 
           // Add the image to the map style.
           map.addImage('marker', image);
-        });
-
-      map.loadImage(
-        'https://docs.mapbox.com/mapbox-gl-js/assets/cat.png',
-        (error, image) => {
-          if (error) throw error;
-
-          // Add the image to the map style.
-          map.addImage('cat', image);
-        });
-
-      
+        });      
 
       map.addSource('park', {
         'type': 'geojson',
@@ -99,8 +88,8 @@ const Map = ( { parkBoundaries, benches } ) => {
           'line-cap': 'round'
           },
         'paint': {
-          'line-color': 'blue',
-          'line-width': 5
+          'line-color': 'black',
+          'line-width': 3
           },
         'filter': ['==', '$type', 'LineString']
       });
@@ -118,7 +107,7 @@ const Map = ( { parkBoundaries, benches } ) => {
         'layout': {
           'visibility': 'visible',
           'icon-image': 'marker',
-          'icon-offset': [10, -10]
+          'icon-offset': [10, -15]
           },
         'filter': ['==', '$type', 'Point']
       });
