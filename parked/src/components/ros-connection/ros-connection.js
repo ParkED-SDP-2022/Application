@@ -24,6 +24,12 @@ class RosConnection {
 
     }
 
+    checkConnection(){
+        this.ros.on('connection', function() {
+            console.log('Connected to websocket server.');
+        });
+    }
+
     initOdomTopic(){
         // Init topic object
         this.odom = new this.ROSLIBR.Topic({
@@ -78,7 +84,7 @@ class RosConnection {
         //   this.teleop.scale = robotSpeedRange.value / 100
         // }
       }
-      
+
 }
 
 

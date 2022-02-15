@@ -11,7 +11,7 @@ export class JoystickController extends React.Component{
   MAX_JOYSTICK_X_Y = 50
 
   ros;
-  twist;
+  //twist;
 
   publishImmidiately = true;
   robot_IP;
@@ -33,6 +33,8 @@ export class JoystickController extends React.Component{
 
   componentDidMount() {
     this.ros = new RosConnection();
+    this.ros.checkConnection();
+
   }
 
   // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
@@ -61,11 +63,11 @@ export class JoystickController extends React.Component{
 
   moveAction(linear, angular) {
     if (linear !== undefined && angular !== undefined) {
-      this.twist.linear.x = linear;
-      this.twist.angular.z = angular;
+      this.ros.twist.linear.x = linear;
+      this.ros.twist.angular.z = angular;
     } else {
-      this.twist.linear.x = 0;
-      this.twist.angular.z = 0;
+      this.ros.twist.linear.x = 0;
+      this.ros.twist.angular.z = 0;
     }
     this.ros.cmdVel.publish(this.twist);
   }
