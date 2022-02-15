@@ -8,6 +8,7 @@
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.1.3",
+    "font-awesome": "^4.7.0",
     "maki": "^2.1.0",
     "nipplejs": "^0.9.0",
     "react": "^16.13.0",
