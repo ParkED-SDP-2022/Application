@@ -1,0 +1,125 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":1,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.1973862648010254,
+            55.94220660994057
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":2,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.198469877243042,
+            55.9421104744966
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":3,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.1998056173324585,
+            55.941963266635575
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":4,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.199532032012939,
+            55.94169288339243
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":5,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.1983518600463867,
+            55.94120618879813
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":6,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.196544051170349,
+            55.94084266600632
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":7,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.1969088315963745,
+            55.94146756258125
+          ]
+        }
+      },
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":8,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            -3.196324110031128,
+            55.941831079508084
+          ]
+        }
+      }
+    ]
+  }

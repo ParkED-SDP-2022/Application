@@ -5,6 +5,9 @@
  * https://docs.mapbox.com/mapbox-gl-js/example/multiple-geometries/
  * https://docs.mapbox.com/mapbox-gl-js/example/geojson-line/
  * 
+ * https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/
+ * https://www.lostcreekdesigns.co/writing/how-to-create-a-map-popup-component-using-mapbox-and-react/
+ * 
  * Currently a temporary "dummy" map which centres on george square
  * 
  * TODO: load in and render geojson data
@@ -14,16 +17,36 @@
 
 import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
+import ReactDOM from 'react-dom';
 import './map.scss';
+import marker from '../../assets/map/marker2.png';
 
 import '../../App.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
 
+const Popup = ({ benchName, battery, inUse }) => (
+  <div className="popup bench-marker">
+    <div className="bench-metric-row">
+      <h4 className="row-title">Bench Number:</h4>
+      <div className="row-value">{benchName}</div>
+    </div>
+    <div className="bench-metric-row">
+      <h4 className="row-title">Status:</h4>
+      <div className="row-value">{inUse ? "Occupied" : "Unoccupied"}</div>
+    </div>
+    <div className="bench-metric-row">
+      <h4 className="row-title">Current Battery Power:</h4>
+      <div className="row-value">{battery}%</div>
+    </div>
+  </div>
+)
 
-const Map = ( { parkBoundaries } ) => {
+
+const Map = ( { parkBoundaries, benches } ) => {
   const mapContainerRef = useRef(null);
+  const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
   // initialize map when component mounts
   useEffect(() => {
@@ -32,7 +55,7 @@ const Map = ( { parkBoundaries } ) => {
       style: 'mapbox://styles/mapbox/streets-v11',
       //west-end of the meadows
       center: [-3.197310, 55.941542],
-      zoom: 15,
+      zoom: 16,
       interactive: true
     });
 
@@ -40,32 +63,16 @@ const Map = ( { parkBoundaries } ) => {
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
     
     map.on('load', () => {
+      map.resize();
 
       map.loadImage(
-        'https://docs.mapbox.com/mapbox-gl-js/assets/cat.png',
+        marker,
         (error, image) => {
           if (error) throw error;
 
           // Add the image to the map style.
-          map.addImage('cat', image);
-        });
-
-// Add a data source containing bench's initial location.
-      map.addSource('point', {
-        'type': 'geojson',
-        'data': {
-          'type': 'FeatureCollection',
-          'features': [
-            {
-              'type': 'Feature',
-              'geometry': {
-                'type': 'Point',
-                'coordinates': [-3.1967103481292725, 55.94144352828404]
-              }
-            }
-          ]
-        }
-      });
+          map.addImage('marker', image);
+        });      
 
       map.addSource('park', {
         'type': 'geojson',
@@ -81,22 +88,56 @@ const Map = ( { parkBoundaries } ) => {
           'line-cap': 'round'
           },
         'paint': {
-          'line-color': 'blue',
-          'line-width': 5
+          'line-color': 'black',
+          'line-width': 3
           },
         'filter': ['==', '$type', 'LineString']
       });
 
+
+      // Add a data source containing benches.
+      map.addSource('benches', {
+        'type': 'geojson',
+        'data': benches //test file of boundaries
+        });
       map.addLayer({
-        'id': 'points',
+        'id': 'bench_points',
         'type': 'symbol',
-        'source': 'point', // reference the data source
+        'source': 'benches',
         'layout': {
-          'icon-image': 'cat', // reference the image
-          'icon-size': 0.25
-        }
+          'visibility': 'visible',
+          'icon-image': 'marker',
+          'icon-offset': [10, -15]
+          },
+        'filter': ['==', '$type', 'Point']
       });
+
+      
     });
+
+    map.on("click", e => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: ["bench_points"],
+      })
+      if (features.length > 0) {
+        const feature = features[0]
+        // create popup node
+        const popupNode = document.createElement("div")
+        ReactDOM.render(
+          <Popup 
+          benchName={feature?.properties?.benchName} 
+          battery={feature?.properties?.battery}
+          inUse={feature?.properties?.inUse}
+          />,
+          popupNode
+        )
+        popUpRef.current
+          .setLngLat(e.lngLat)
+          .setDOMContent(popupNode)
+          .addTo(map)
+      }
+    })
+
       
 
     // clean up on unmount

@@ -1,19 +1,24 @@
-import logo from './logo.svg';
 import './App.css';
-import Map from "./components/map/Map";
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import {BasicController} from "./pages/basic-controller/basic-controller";
-import {JoystickController} from "./components/joystick-controller/joystick-controller";
+import { Home, About, Account, Whoops404 } from "./pages/pages"
 
 function App() {
   return (
-    <div className="App">
-      <div className='d-flex flex-column justify-content-center align-items-center'>
-        <img src={require('./assets/branding/logo.png')} className='logo'/>
-        <BasicController/>
+    <>
+    <Router>
+      <div>
+        <Routes>
+          <Route path="/" element={<Home />}/>
+          <Route path="/about" element={<About />} />
+          <Route path="/account" element={<Account />}/>
+          <Route path="*" element={<Whoops404 />}/>
+      </Routes>
       </div>
-    </div>
+    </Router>
+      
+    </>
   );
 }
 
