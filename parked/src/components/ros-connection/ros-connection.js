@@ -1,3 +1,5 @@
+import {sha512} from "js-sha512";
+import {ClientJS} from "clientjs";
 
 
 class RosConnection {
@@ -11,17 +13,33 @@ class RosConnection {
         this.KEYBOARDTELEOP = window.KEYBOARDTELEOP
 
         this.robot_IP = "ws://localhost:9090";
+        this.client = new ClientJS();
 
         // Init handle for rosbridge_websocket
         // robot ip + port need to be the same as websocket launch
-        this.ros = new this.ROSLIBR.Ros({
-            url: this.robot_IP
-        });
-
+        this.ros = new this.ROSLIBR.Ros();
+        console.log(this.ros);
+        this.authenticateRos();
+        this.ros.connect(this.robot_IP);
+        this.ros.on('connection',function(result) {
+          console.log('Connected to web');
+        })
         this.initVelocityPublisher();
         this.initTeleopKeyboard();
         this.initOdomTopic();
 
+    }
+
+    authenticateRos(){
+
+      let secret = "1234567890abcdef";
+      let dest = this.robot_IP;
+      let rand = 'rand';
+      let time = new Date().getTime() / 1000;
+      let timeEnd = time + 1000
+      let level = "admin"
+      let mac = sha512(secret + this.client.getUserAgent() + dest + rand + parseInt(time).toString() + level + parseInt(timeEnd).toString())  // using sha512 library js-sha512 and client library clientjs
+      this.ros.authenticate(mac, this.client.getUserAgent(), dest, rand, time, level, timeEnd)  // method from roslibjs
     }
 
     initOdomTopic(){

@@ -11,7 +11,6 @@ export class JoystickController extends React.Component{
   MAX_JOYSTICK_X_Y = 50
 
   ros;
-  twist;
 
   publishImmidiately = true;
   robot_IP;
@@ -61,13 +60,13 @@ export class JoystickController extends React.Component{
 
   moveAction(linear, angular) {
     if (linear !== undefined && angular !== undefined) {
-      this.twist.linear.x = linear;
-      this.twist.angular.z = angular;
+      this.ros.twist.linear.x = linear;
+      this.ros.twist.angular.z = angular;
     } else {
-      this.twist.linear.x = 0;
-      this.twist.angular.z = 0;
+      this.ros.twist.linear.x = 0;
+      this.ros.twist.angular.z = 0;
     }
-    this.ros.cmdVel.publish(this.twist);
+    this.ros.cmdVel.publish(this.ros.twist);
   }
 
   parseMessage(message){
