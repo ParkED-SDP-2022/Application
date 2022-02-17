@@ -41,6 +41,12 @@ class RosConnection {
       let mac = sha512(secret + this.client.getUserAgent() + dest + rand + parseInt(time).toString() + level + parseInt(timeEnd).toString())  // using sha512 library js-sha512 and client library clientjs
       this.ros.authenticate(mac, this.client.getUserAgent(), dest, rand, time, level, timeEnd)  // method from roslibjs
     }
+    
+    checkConnection(){
+        this.ros.on('connection', function() {
+            console.log('Connected to websocket server.');
+        });
+    }
 
     initOdomTopic(){
         // Init topic object
@@ -96,7 +102,7 @@ class RosConnection {
         //   this.teleop.scale = robotSpeedRange.value / 100
         // }
       }
-      
+
 }
 
 
