@@ -19,9 +19,12 @@ class RosConnection {
         // Init handle for rosbridge_websocket
         // robot ip + port need to be the same as websocket launch
         this.ros = new this.ROSLIBR.Ros();
+        // set variable if we need authentication or not, require extra steps if true
+        this.AUTHENTICATION = false;
         
         this.authenticateRos();
 
+        // connect to robot 
         this.ros.connect(this.robot_IP);
         this.checkConnection();
 
@@ -35,22 +38,25 @@ class RosConnection {
     // need to run rosauth node AND authenticate parameter true for rosbridge
     // to run rosbridge :: 
     // roslaunch rosbridge_server rosbridge_websocket.launch authenticate:=true
-    // to run rosauth
+    // to run rosauth ::
     // rosrun rosauth ros_mac_authentication _secret_file_location:=/tmp/secret.txt _allowed_time_delta:=-1
     
     authenticateRos(){
-
-      // setup the whole key
-      // secret key will be the key part of this message
-      let secret = "1234567890abcdef";
-      let dest = this.robot_IP;
-      let rand = 'rand';
-      let time = new Date().getTime() / 1000;
-      let timeEnd = time + 1000
-      let level = "admin"
-      let mac = sha512(secret + this.client.getUserAgent() + dest + rand + parseInt(time).toString() + level + parseInt(timeEnd).toString())  // using sha512 library js-sha512 and client library clientjs
-      
-      this.ros.authenticate(mac, this.client.getUserAgent(), dest, rand, time, level, timeEnd)  // method from roslibjs
+      // do nothing if AUTHENTICATION == false
+      if (this.AUTHENTICATION == true){
+        // setup the whole key
+        // secret key will be the key part of this message
+        let secret = "1234567890abcdef";
+        let dest = this.robot_IP;
+        let rand = 'rand';
+        let time = new Date().getTime() / 1000;
+        let timeEnd = time + 1000
+        let level = "admin"
+        let mac = sha512(secret + this.client.getUserAgent() + dest + rand + parseInt(time).toString() + level + parseInt(timeEnd).toString())  // using sha512 library js-sha512 and client library clientjs
+        
+        this.ros.authenticate(mac, this.client.getUserAgent(), dest, rand, time, level, timeEnd)  // method from roslibjs
+    
+      }
     }
     
     checkConnection(){
@@ -58,7 +64,7 @@ class RosConnection {
             console.log('Connected to websocket server.');
         });
     }
-    
+
     initOdomTopic(){
         // Init topic object
         this.odom = new this.ROSLIBR.Topic({
