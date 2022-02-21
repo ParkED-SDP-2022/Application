@@ -12,26 +12,36 @@ class RosConnection {
         this.ROSLIBR = window.ROSLIB;
         this.KEYBOARDTELEOP = window.KEYBOARDTELEOP
 
+        // need to wss if possible but requires ssl certificate
         this.robot_IP = "ws://localhost:9090";
         this.client = new ClientJS();
 
         // Init handle for rosbridge_websocket
         // robot ip + port need to be the same as websocket launch
         this.ros = new this.ROSLIBR.Ros();
-        console.log(this.ros);
+        
         this.authenticateRos();
+
         this.ros.connect(this.robot_IP);
-        this.ros.on('connection',function(result) {
-          console.log('Connected to web');
-        })
+        this.checkConnection();
+
         this.initVelocityPublisher();
         this.initTeleopKeyboard();
         this.initOdomTopic();
 
     }
-
+    
+    // reference : http://wiki.ros.org/rosauth
+    // need to run rosauth node AND authenticate parameter true for rosbridge
+    // to run rosbridge :: 
+    // roslaunch rosbridge_server rosbridge_websocket.launch authenticate:=true
+    // to run rosauth
+    // rosrun rosauth ros_mac_authentication _secret_file_location:=/tmp/secret.txt _allowed_time_delta:=-1
+    
     authenticateRos(){
 
+      // setup the whole key
+      // secret key will be the key part of this message
       let secret = "1234567890abcdef";
       let dest = this.robot_IP;
       let rand = 'rand';
@@ -39,6 +49,7 @@ class RosConnection {
       let timeEnd = time + 1000
       let level = "admin"
       let mac = sha512(secret + this.client.getUserAgent() + dest + rand + parseInt(time).toString() + level + parseInt(timeEnd).toString())  // using sha512 library js-sha512 and client library clientjs
+      
       this.ros.authenticate(mac, this.client.getUserAgent(), dest, rand, time, level, timeEnd)  // method from roslibjs
     }
     
@@ -47,7 +58,7 @@ class RosConnection {
             console.log('Connected to websocket server.');
         });
     }
-
+    
     initOdomTopic(){
         // Init topic object
         this.odom = new this.ROSLIBR.Topic({
