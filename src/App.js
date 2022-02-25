@@ -10,26 +10,29 @@ import { JoystickController } from "./components/joystick-controller/joystick-co
 import Navigator from "./pages/navigator";
 //home
 import Home from "./pages/home";
-//signup
-import Signup from "./pages/signup";
+//register
+import Register from "./pages/register";
 //login
 import Login from "./pages/login";
+// reminder
+import Flash from './pages/flash';
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Navigator></Navigator>
+        <Navigator/>
+        <Flash/>
         <Switch>
           <Route path='/' exact component={Home} />
           <Route path='/login' exact component={Login} />
-          <Route path='/signup' exact component={Signup} />
+          <Route path='/register' exact component={Register} />
         </Switch>
       </Router>
-      <div className='d-flex flex-column justify-content-center align-items-center'>
+      {/* <div className='d-flex flex-column justify-content-center align-items-center'>
         <img src={require('./assets/branding/logo.png')} className='logo' />
         <BasicController />
-      </div>
+      </div> */}
     </div>
   );
 }
