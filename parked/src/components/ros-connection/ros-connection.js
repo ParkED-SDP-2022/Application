@@ -31,6 +31,7 @@ class RosConnection {
         this.initVelocityPublisher();
         this.initTeleopKeyboard();
         this.initOdomTopic();
+        this.initGPSTopic();
 
     }
     
@@ -118,7 +119,18 @@ class RosConnection {
         // robotSpeedRange.oninput = function () {
         //   this.teleop.scale = robotSpeedRange.value / 100
         // }
-      }
+    }
+
+    initGPSTopic(){
+      // Init topic object
+      this.gps = new this.ROSLIBR.Topic({
+        ros: this.ros,
+        name: '/robot_location',
+        messageType: 'parked_custom_msgs/Point'
+      });
+  
+      this.gps.advertise();
+    }
 
 }
 
