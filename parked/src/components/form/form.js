@@ -1,15 +1,16 @@
-
-function Form() {
+function Form({ benchID, loc }) {
 
     const content = {
         inputs: [
             {
                 label: 'Bench Number',
                 name: 'bench number',
+                val: benchID,
             },
             {
-                label: 'New Location',
-                name: 'new location',
+                label: 'Longitude',
+                name: 'new longitude',
+                val: loc,
             },
         ],
     };
@@ -25,7 +26,7 @@ function Form() {
                             <label className='label'>{input.label}</label>
                         </p>
                         <p>
-                            <input name={input.name} className="input"/>
+                            <input name={input.name} value={input.val} readOnly={true} className="input"/>
                         </p>
                     </div>
                 );

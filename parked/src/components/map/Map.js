@@ -19,7 +19,7 @@ import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
-import marker from '../../assets/map/marker2.png';
+import markerImg from '../../assets/map/marker2.png';
 
 import '../../App.css';
 
@@ -44,7 +44,7 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, benches } ) => {
+const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
@@ -54,10 +54,23 @@ const Map = ( { parkBoundaries, benches } ) => {
       container: mapContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       //west-end of the meadows
-      center: [-3.197310, 55.941542],
+      center: center,
       zoom: 16,
       interactive: true
     });
+  
+    function onDragEnd() {
+      const lngLat = marker.getLngLat();
+      locHandler(lngLat)
+    }
+  
+    const marker = new mapboxgl.Marker({
+      draggable: true
+      })
+      .setLngLat(center)
+      .addTo(map);
+
+    marker.on('dragend', onDragEnd);
 
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
@@ -66,7 +79,7 @@ const Map = ( { parkBoundaries, benches } ) => {
       map.resize();
 
       map.loadImage(
-        marker,
+        markerImg,
         (error, image) => {
           if (error) throw error;
 
@@ -123,6 +136,8 @@ const Map = ( { parkBoundaries, benches } ) => {
         const feature = features[0]
         // create popup node
         const popupNode = document.createElement("div")
+        console.log("clicked_bench: " + feature?.properties?.benchName)
+        IDhandler(feature?.properties?.benchName)
         ReactDOM.render(
           <Popup 
           benchName={feature?.properties?.benchName} 
@@ -136,9 +151,7 @@ const Map = ( { parkBoundaries, benches } ) => {
           .setDOMContent(popupNode)
           .addTo(map)
       }
-    })
-
-      
+    });
 
     // clean up on unmount
     return () => map.remove();
