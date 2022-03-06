@@ -16,6 +16,10 @@ export class AccountPage extends React.Component{
   state = {
     benchID: "",
     location: "",
+    bench1loc: {
+      'long': -3.1974862648010254,
+      'lat': 55.94221660994057
+    },
    }
 
 handleIDCallback = (bench) =>{
@@ -26,11 +30,18 @@ handleLocationCallback = (loc) =>{
   this.setState({location: loc})
 }
 
+handleBench1Callback = (loc) =>{
+  this.setState({bench1loc: loc})
+}
+
+//this.ros = new RosConnection();
+//this.ros.listenForGPS(handleBench1Callback)
+
   render() {
       return(
           <div className='AccountPage'>
               <div className='MapSide'>
-                <Map parkBoundaries={testMap} benches={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[-3.197310, 55.941542]} className="map"/>
+                <Map parkBoundaries={testMap} benches={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[-3.197310, 55.941542]} bench1Coords={ this.state.bench1loc } className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">

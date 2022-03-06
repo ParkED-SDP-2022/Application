@@ -8,6 +8,8 @@
  * https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/
  * https://www.lostcreekdesigns.co/writing/how-to-create-a-map-popup-component-using-mapbox-and-react/
  * 
+ * https://docs.mapbox.com/mapbox-gl-js/example/live-geojson/
+ * 
  * Currently a temporary "dummy" map which centres on george square
  * 
  * TODO: load in and render geojson data
@@ -15,13 +17,14 @@
  * TODO: dynamically zoom to data?
  */
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
 import markerImg from '../../assets/map/marker2.png';
 
 import '../../App.css';
+import data from '../../assets/map/benches.json'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
@@ -44,9 +47,12 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
+const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center, bench1Coords } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
+
+  const geojson = data
+  console.log(geojson)
 
   // initialize map when component mounts
   useEffect(() => {
@@ -111,7 +117,7 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
       // Add a data source containing benches.
       map.addSource('benches', {
         'type': 'geojson',
-        'data': benches //test file of boundaries
+        'data': geojson //test file of boundaries
         });
       map.addLayer({
         'id': 'bench_points',
@@ -125,6 +131,43 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
         'filter': ['==', '$type', 'Point']
       });
 
+      
+    //Update the source from the API every 2 seconds.
+    const updateSource = setInterval(async () => {
+      geojson.features[0].geometry.coordinates[0] = bench1Coords.long;
+      geojson.features[0].geometry.coordinates[1] = bench1Coords.lat;
+      map.getSource('benches').setData(geojson);
+      }, 2000);
+
+    // async function getLocations(updateSource) {
+    //   // Make a GET request to the API and return the location of the ISS.
+    //   try {
+    //     const response = await fetch(
+    //       'https://api.wheretheiss.at/v1/satellites/25544',
+    //       { method: 'GET' }
+    //     );
+
+    //     const { latitude, longitude } = await response.json();
+        
+    //     // Return the location of the ISS as GeoJSON.
+    //     return {
+    //       'type': 'FeatureCollection',
+    //       'features': [
+    //         {
+    //         'type': 'Feature',
+    //           'geometry': {
+    //           'type': 'Point',
+    //           'coordinates': [longitude, latitude]
+    //           }
+    //         }
+    //       ]
+    //     };
+    //   } catch (err) {
+    //     // If the updateSource interval is defined, clear the interval to stop updating the source.
+    //     if (updateSource) clearInterval(updateSource);
+    //     throw new Error(err);
+    //     }
+    //   }
       
     });
 
