@@ -8,6 +8,8 @@
  * https://docs.mapbox.com/mapbox-gl-js/example/geojson-markers/
  * https://www.lostcreekdesigns.co/writing/how-to-create-a-map-popup-component-using-mapbox-and-react/
  * 
+ * https://docs.mapbox.com/mapbox-gl-js/example/live-geojson/
+ * 
  * Currently a temporary "dummy" map which centres on george square
  * 
  * TODO: load in and render geojson data
@@ -20,6 +22,9 @@ import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
 import markerImg from '../../assets/map/marker2.png';
+
+// import bounds from "../../assets/map/demo2_map.geojson";
+// import benches from "../../assets/map/demo2_benches.json";
 
 import '../../App.css';
 
@@ -44,9 +49,12 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
+const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, bench1Coords } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
+
+  const geojson = data
+  //console.log(geojson)
 
   // initialize map when component mounts
   useEffect(() => {
@@ -55,7 +63,7 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
       style: 'mapbox://styles/mapbox/streets-v11',
       //west-end of the meadows
       center: center,
-      zoom: 16,
+      zoom: 8.3,
       interactive: true
     });
   
@@ -92,26 +100,30 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
         'data': parkBoundaries //test file of boundaries
         });
       map.addLayer({
-        'id': 'park-boundary',
+        'id': 'park-boundary-fill',
+        'type': 'fill',
+        'source': 'park',
+        'layout': {},
+        'paint': {
+          'fill-color': 'green',
+          'fill-opacity': 0.5,
+          }
+      });
+      map.addLayer({
+        'id': 'park-boundary-outline',
         'type': 'line',
         'source': 'park',
-        'layout': {
-          'visibility': 'visible',
-          'line-join': 'round',
-          'line-cap': 'round'
-          },
+        'layout': {},
         'paint': {
-          'line-color': 'black',
-          'line-width': 3
-          },
-        'filter': ['==', '$type', 'LineString']
+          "line-color": '#000',
+          }
       });
 
 
       // Add a data source containing benches.
       map.addSource('benches', {
         'type': 'geojson',
-        'data': benches //test file of boundaries
+        'data': geojson //test file of boundaries
         });
       map.addLayer({
         'id': 'bench_points',
@@ -125,6 +137,15 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center } ) => {
         'filter': ['==', '$type', 'Point']
       });
 
+      
+    //Update the source from the API every 2 seconds.
+    const updateSource = setInterval(async () => {
+      //console.log(geojson.features);
+      geojson.features[0].geometry.coordinates[0] = bench1Coords.long;
+      geojson.features[0].geometry.coordinates[1] = bench1Coords.lat;
+      console.log(geojson.features[0].geometry.coordinates)
+      map.getSource('benches').setData(geojson);
+      }, 2000);
       
     });
 
