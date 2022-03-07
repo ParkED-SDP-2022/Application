@@ -5,6 +5,8 @@ import testMap from "../../assets/map/demo2_map.geojson";
 import benches from "../../assets/map/demo2_benches.json";
 import Map from "../../components/map/Map";
 import Form from "../../components/form/form";
+import RosConnection  from "../../components/ros-connection/ros-connection";
+
 
 export const CoordsContext = createContext({
   coords: 1,
@@ -12,7 +14,34 @@ export const CoordsContext = createContext({
 });
 
 export class AccountPage extends React.Component{
+  ros;
 
+  componentDidMount() {
+    this.ros = new RosConnection();
+    this.ros.checkConnection();
+  }
+
+  handleIDCallback = (bench) =>{
+      this.setState({benchID: bench})
+  }
+
+  handleLocationCallback = (loc) =>{
+    this.setState({location: loc})
+  }
+
+  handleBench1Callback = (loc) =>{
+    this.setState({bench1loc: loc});
+    this.ros.odom.unsubscribe();
+  }
+
+  // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
+  componentWillUnmount() {}
+
+
+  gpsCall(){
+    this.ros.odom.subscribe(this.handleBench1Callback);
+  }
+  
   state = {
     benchID: "",
     location: "",
@@ -22,26 +51,12 @@ export class AccountPage extends React.Component{
     },
    }
 
-handleIDCallback = (bench) =>{
-    this.setState({benchID: bench})
-}
-
-handleLocationCallback = (loc) =>{
-  this.setState({location: loc})
-}
-
-handleBench1Callback = (loc) =>{
-  this.setState({bench1loc: loc})
-}
-
-//this.ros = new RosConnection();
-//this.ros.listenForGPS(handleBench1Callback)
 
   render() {
       return(
           <div className='AccountPage'>
               <div className='MapSide'>
-                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[0.51,0.61]} bench1Coords={ this.state.bench1loc } className="map"/>
+                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[0.51,0.61]} bench1Coords={ this.gpsCall } className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">

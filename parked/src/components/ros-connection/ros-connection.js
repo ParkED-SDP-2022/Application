@@ -15,19 +15,28 @@ class RosConnection {
         // need to wss if possible but requires ssl certificate
         this.robot_IP = "ws://localhost:9090";
         this.client = new ClientJS();
+        
 
         // Init handle for rosbridge_websocket
         // robot ip + port need to be the same as websocket launch
         this.ros = new this.ROSLIBR.Ros();
         // set variable if we need authentication or not, require extra steps if true
         this.AUTHENTICATION = false;
-        
         this.authenticateRos();
 
         // connect to robot 
         this.ros.connect(this.robot_IP);
         this.checkConnection();
 
+        // Initialise ActionClient for sending Move-To-Point instructions
+        this.instructionClient = new this.ROSLIBR.ActionClient({
+          ros : this.ros,
+          serverName : '/move_to_point',
+          actionName : 'parked_custom_messages/MoveToPointAction'
+        });
+        this.instructionAction = this.instructionAction.bind(this);
+
+        // Initialise Topics
         this.initVelocityPublisher();
         this.initTeleopKeyboard();
         this.initOdomTopic();
@@ -132,19 +141,36 @@ class RosConnection {
       this.gps.advertise();
     }
 
-    // subscribeToBenchLocTopic({ messageHandler }){
-    //   var listener = new ROSLIB.Topic({
-    //       ros : ros,
-    //       name : '/robot_position',
-    //       messageType : 'parked_custom_msgs/Point'
-    //     });
-        
-    //     listener.subscribe(function(message) {
-    //       console.log('Received message on ' + listener.name + ': ' + message.data);
-    //       messageHandler(message)
-    //       listener.unsubscribe();
-    //     });
-    // }
+    instructionAction(dest){
+      var goal = new this.ROSLIBR.Goal({
+        actionClient : this.instructionClient,
+        goalMessage : {
+          destination: dest
+        }
+      });
+
+      goal.on('feedback', function(feedback) {
+        console.log('Feedback: ' + feedback.sequence);
+      });
+
+      goal.on('result', function(result) {
+        console.log('Final Result: ' + result.sequence);
+      });
+
+      this.ros.on('connection', function() {
+        console.log('Connected to websocket server.');
+      });
+
+      this.ros.on('error', function(error) {
+        console.log('Error connecting to websocket server: ', error);
+      });
+      
+      this.ros.on('close', function() {
+        console.log('Connection to websocket server closed.');
+      });
+       
+      goal.send();
+    }
 }
 
 
