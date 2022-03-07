@@ -1,8 +1,8 @@
 import React, { createContext } from "react";
 import "./account.scss";
 import { JoystickController } from "../../components/joystick-controller/joystick-controller";
-import testMap from "../../assets/map/test.geojson";
-import benches from "../../assets/map/benches.geojson";
+import testMap from "../../assets/map/demo2_map.geojson";
+import benches from "../../assets/map/demo2_benches.json";
 import Map from "../../components/map/Map";
 import Form from "../../components/form/form";
 
@@ -17,8 +17,8 @@ export class AccountPage extends React.Component{
     benchID: "",
     location: "",
     bench1loc: {
-      'long': -3.1974862648010254,
-      'lat': 55.94221660994057
+      long: benches.features[0].geometry.coordinates[0],
+      lat: benches.features[0].geometry.coordinates[1]
     },
    }
 
@@ -41,7 +41,7 @@ handleBench1Callback = (loc) =>{
       return(
           <div className='AccountPage'>
               <div className='MapSide'>
-                <Map parkBoundaries={testMap} benches={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[-3.197310, 55.941542]} bench1Coords={ this.state.bench1loc } className="map"/>
+                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[0.51,0.61]} bench1Coords={ this.state.bench1loc } className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">

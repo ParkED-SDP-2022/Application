@@ -1,0 +1,20 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+      {
+        "type": "Feature",
+        "properties": {
+          "benchName":1,
+          "battery":100,
+          "inUse":false
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            0.8,
+            0.4
+          ]
+        }
+      }
+    ]
+  }

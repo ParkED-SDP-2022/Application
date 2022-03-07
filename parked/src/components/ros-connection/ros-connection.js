@@ -125,13 +125,26 @@ class RosConnection {
       // Init topic object
       this.gps = new this.ROSLIBR.Topic({
         ros: this.ros,
-        name: '/robot_location',
+        name: '/robot_position',
         messageType: 'parked_custom_msgs/Point'
       });
   
       this.gps.advertise();
     }
 
+    // subscribeToBenchLocTopic({ messageHandler }){
+    //   var listener = new ROSLIB.Topic({
+    //       ros : ros,
+    //       name : '/robot_position',
+    //       messageType : 'parked_custom_msgs/Point'
+    //     });
+        
+    //     listener.subscribe(function(message) {
+    //       console.log('Received message on ' + listener.name + ': ' + message.data);
+    //       messageHandler(message)
+    //       listener.unsubscribe();
+    //     });
+    // }
 }
 
 

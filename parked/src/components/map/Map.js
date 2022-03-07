@@ -17,14 +17,16 @@
  * TODO: dynamically zoom to data?
  */
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
 import markerImg from '../../assets/map/marker2.png';
 
+// import bounds from "../../assets/map/demo2_map.geojson";
+// import benches from "../../assets/map/demo2_benches.json";
+
 import '../../App.css';
-import data from '../../assets/map/benches.json'
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
@@ -47,12 +49,12 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center, bench1Coords } ) => {
+const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, bench1Coords } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
   const geojson = data
-  console.log(geojson)
+  //console.log(geojson)
 
   // initialize map when component mounts
   useEffect(() => {
@@ -61,7 +63,7 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center, bench1Co
       style: 'mapbox://styles/mapbox/streets-v11',
       //west-end of the meadows
       center: center,
-      zoom: 16,
+      zoom: 8.3,
       interactive: true
     });
   
@@ -98,19 +100,23 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center, bench1Co
         'data': parkBoundaries //test file of boundaries
         });
       map.addLayer({
-        'id': 'park-boundary',
+        'id': 'park-boundary-fill',
+        'type': 'fill',
+        'source': 'park',
+        'layout': {},
+        'paint': {
+          'fill-color': 'green',
+          'fill-opacity': 0.5,
+          }
+      });
+      map.addLayer({
+        'id': 'park-boundary-outline',
         'type': 'line',
         'source': 'park',
-        'layout': {
-          'visibility': 'visible',
-          'line-join': 'round',
-          'line-cap': 'round'
-          },
+        'layout': {},
         'paint': {
-          'line-color': 'black',
-          'line-width': 3
-          },
-        'filter': ['==', '$type', 'LineString']
+          "line-color": '#000',
+          }
       });
 
 
@@ -134,40 +140,12 @@ const Map = ( { parkBoundaries, benches, IDhandler, locHandler, center, bench1Co
       
     //Update the source from the API every 2 seconds.
     const updateSource = setInterval(async () => {
+      //console.log(geojson.features);
       geojson.features[0].geometry.coordinates[0] = bench1Coords.long;
       geojson.features[0].geometry.coordinates[1] = bench1Coords.lat;
+      console.log(geojson.features[0].geometry.coordinates)
       map.getSource('benches').setData(geojson);
       }, 2000);
-
-    // async function getLocations(updateSource) {
-    //   // Make a GET request to the API and return the location of the ISS.
-    //   try {
-    //     const response = await fetch(
-    //       'https://api.wheretheiss.at/v1/satellites/25544',
-    //       { method: 'GET' }
-    //     );
-
-    //     const { latitude, longitude } = await response.json();
-        
-    //     // Return the location of the ISS as GeoJSON.
-    //     return {
-    //       'type': 'FeatureCollection',
-    //       'features': [
-    //         {
-    //         'type': 'Feature',
-    //           'geometry': {
-    //           'type': 'Point',
-    //           'coordinates': [longitude, latitude]
-    //           }
-    //         }
-    //       ]
-    //     };
-    //   } catch (err) {
-    //     // If the updateSource interval is defined, clear the interval to stop updating the source.
-    //     if (updateSource) clearInterval(updateSource);
-    //     throw new Error(err);
-    //     }
-    //   }
       
     });
 
