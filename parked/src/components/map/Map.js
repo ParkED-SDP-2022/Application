@@ -50,7 +50,6 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
   const geojson = data
-  //console.log(geojson)
 
   // initialize map when component mounts
   useEffect(() => {

@@ -16,6 +16,24 @@ export const CoordsContext = createContext({
 export class AccountPage extends React.Component{
   ros;
 
+  constructor(props){
+    super(props);
+
+    this.gpsCall = this.gpsCall.bind(this);
+
+
+    this.state = {
+      benchID: "",
+      location: "",
+      bench1loc: {
+        long: benches.features[0].geometry.coordinates[0] + 1,
+        lat: benches.features[0].geometry.coordinates[1]
+      },
+    }
+
+    
+  }
+
   componentDidMount() {
     this.ros = new RosConnection();
     this.ros.checkConnection();
@@ -30,16 +48,27 @@ export class AccountPage extends React.Component{
   }
 
   handleBench1Callback = (loc) =>{
-    this.setState({bench1loc: loc});
-    this.ros.odom.unsubscribe();
+    console.log("loc: " + loc.lat)
+    this.setState({bench1loc: {
+      long: loc.long,
+      lat: loc.lat
+    }});
+    console.log(this.state)
+    this.ros.gps.unsubscribe();
   }
 
   // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
   componentWillUnmount() {}
 
 
-  gpsCall(){
-    this.ros.odom.subscribe(this.handleBench1Callback);
+  gpsCall = () => {
+    // this.ros.gps.subscribe(this.handleBench1Callback);
+    console.log("setting state")
+    var newLoc = {
+      long: this.state.bench1loc.long + 0.1,
+      lat: this.state.bench1loc.lat,
+    }
+    this.setState({bench1loc: newLoc});
   }
   
   state = {
