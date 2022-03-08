@@ -22,10 +22,6 @@ import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
 import markerImg from '../../assets/map/marker2.png';
-
-// import bounds from "../../assets/map/demo2_map.geojson";
-// import benches from "../../assets/map/demo2_benches.json";
-
 import '../../App.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
@@ -49,7 +45,7 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, bench1Coords } ) => {
+const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandler, getCoords } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
@@ -136,18 +132,19 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, bench1Coord
           },
         'filter': ['==', '$type', 'Point']
       });
-
-      
-    //Update the source from the API every 2 seconds.
-    const updateSource = setInterval(async () => {
-      //console.log(geojson.features);
-      geojson.features[0].geometry.coordinates[0] = bench1Coords.long;
-      geojson.features[0].geometry.coordinates[1] = bench1Coords.lat;
-      console.log(geojson.features[0].geometry.coordinates)
-      map.getSource('benches').setData(geojson);
-      }, 2000);
       
     });
+
+    //Update the source from the API every 2 seconds.
+    const updateSource = setInterval(async () => {
+      updateHandler();
+      const benchCoords = getCoords()
+      console.log("child reading from parent: " + benchCoords.long);
+      geojson.features[0].geometry.coordinates[0] = benchCoords.long;
+      geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
+      console.log("bench data: " + geojson.features[0].geometry.coordinates[0]);
+      map.getSource('benches').setData(geojson);
+      }, 5000);
 
     map.on("click", e => {
       const features = map.queryRenderedFeatures(e.point, {

@@ -49,14 +49,22 @@ export class AccountPage extends React.Component{
       long: benches.features[0].geometry.coordinates[0],
       lat: benches.features[0].geometry.coordinates[1]
     },
-   }
+  }
+
+  updateCoords = () => {
+    this.gpsCall()
+  }
+
+  getState = () => {
+    return this.state.bench1loc;
+  }
 
 
   render() {
       return(
           <div className='AccountPage'>
               <div className='MapSide'>
-                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} center={[0.51,0.61]} bench1Coords={ this.gpsCall } className="map"/>
+                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} updateHandler={ this.updateCoords } center={[0.51,0.61]} getCoords={ this.getState } className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">
