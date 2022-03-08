@@ -49,12 +49,11 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, bench1Coords } ) => {
+const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, coordsHandler, benchCoords } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
   const geojson = data
-  //console.log(geojson)
 
   // initialize map when component mounts
   useEffect(() => {
@@ -139,12 +138,19 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, bench1Coord
 
       
     //Update the source from the API every 2 seconds.
-    const updateSource = setInterval(async () => {
-      //console.log(geojson.features);
-      geojson.features[0].geometry.coordinates[0] = bench1Coords.long;
-      geojson.features[0].geometry.coordinates[1] = bench1Coords.lat;
-      console.log(geojson.features[0].geometry.coordinates)
-      map.getSource('benches').setData(geojson);
+    // const updateSource = setInterval(() => {
+    //   coordsHandler()
+    //   // geojson.features[0].geometry.coordinates[0] = benchCoords.long;
+    //   // geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
+    //   console.log("updated coords:" + benchCoords.long)
+    //   map.getSource('benches').setData(geojson);
+    //   }, 5000);
+
+    // Update the source from the API every 2 seconds.
+      const updateSource = setInterval(() => {
+        const newData = geojson;
+        newData.features[0].geometry.coordinates[0] = benchCoords;
+        map.getSource('iss').setData(newData);
       }, 2000);
       
     });

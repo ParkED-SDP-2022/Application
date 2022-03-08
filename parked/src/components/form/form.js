@@ -21,8 +21,8 @@ export default class Form extends React.Component{
     componentWillUnmount() {}
 
     handleInstruction() {
-        console.log('props')
-        console.log(this.props)
+        //console.log('props')
+        //console.log(this.props)
         const long = this.props.loc.lng;
         const lat = this.props.loc.lat;
         const angle = -999;
@@ -38,7 +38,7 @@ export default class Form extends React.Component{
     }
 
     render() {
-        console.log(this.props)
+        //console.log(this.props)
         var content = {
             inputs: [
                 {
