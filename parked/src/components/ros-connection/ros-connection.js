@@ -145,8 +145,8 @@ class RosConnection {
       // Init topic object
       this.gps = new this.ROSLIBR.Topic({
         ros: this.ros,
-        name: '/robot_position', //TODO: actual name for this ros message
-        messageType: 'parked_custom_msgs/Point'
+        name: '/heat_map_data',
+        messageType: 'std_msgs/String'
       });
   
       this.gps.advertise();

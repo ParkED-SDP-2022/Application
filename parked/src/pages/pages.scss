@@ -64,62 +64,65 @@ About Page Styling
 */
 
 .AboutPage {
-    display: flex;
-    height: 100vh;
+  display: flex;
+  height: 100vh;
 }
 
 .LeftSide {
-    width: 50vw;
-    height: 100vh;
-    background-color: $gunmetal;
+  display: flex;
+  width: 50vw;
+  height: 100vh;
+  background-color: $gunmetal;
 }
 
 .RightSide {
-    background-image: url("../assets/backgrounds/about-1.jpg");
-    width: 50vw;
-    height: 100vh;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
+  display: flex;
+  background-image: url("../assets/backgrounds/about-1.jpg");
+  width: 50vw;
+  height: 100vh;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .TitleDiv {
-    position: absolute;
-    width: 50vw;
-    height: 20vh;
-    padding-top: 5vh;
-    padding-left: 2vw;
-    background: $green-pantone;
-    z-index: 9;
-    margin: 10vh;
-    margin-left: 20vh;
-    line-height: 100%;
-    -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.1);
-    -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
-    box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  position: absolute;
+  width: 50vw;
+  height: 20vh;
+  padding-top: 5vh;
+  padding-left: 2vw;
+  background: $green-pantone;
+  z-index: 9;
+  margin: 10vh;
+  margin-left: 20vh;
+  line-height: 100%;
+  -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
+  box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.1);
   }
 
 .TitleDiv h1{
-    width: 100%;
-    height: 100%;
-    font-size: 4em;
-    color: $cultured;
-    line-height: 100%;
-    vertical-align: middle;
+  width: 100%;
+  height: 100%;
+  font-size: 4em;
+  color: $cultured;
+  line-height: 100%;
+  vertical-align: middle;
 }
 
 .aboutText{
-    height: 60vh;
-    width: 45vw;
-    background-color: $cultured;
-    position: absolute;
-    margin-top: 35vh;
-    margin-left: 10vw;
-    padding: 10px;
-    -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.4);
-    -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.4);
-    box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.4);
-    color: $gunmetal;
+  height: 60vh;
+  width: 45vw;
+  background-color: $cultured;
+  position: absolute;
+  margin-top: 35vh;
+  margin-left: 10vw;
+  padding: 10px;
+  -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.4);
+  box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.4);
+  color: $gunmetal;
 }
 
 /*
