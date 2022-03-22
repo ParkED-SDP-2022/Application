@@ -141,6 +141,17 @@ class RosConnection {
       this.gps.advertise();
     }
 
+    initHeatmapTopic(){
+      // Init topic object
+      this.gps = new this.ROSLIBR.Topic({
+        ros: this.ros,
+        name: '/robot_position', //TODO: actual name for this ros message
+        messageType: 'parked_custom_msgs/Point'
+      });
+  
+      this.gps.advertise();
+    }
+
     instructionAction(dest){
       var goal = new this.ROSLIBR.Goal({
         actionClient : this.instructionClient,

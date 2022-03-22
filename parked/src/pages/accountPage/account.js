@@ -57,18 +57,27 @@ export class AccountPage extends React.Component{
     this.ros.gps.unsubscribe();
   }
 
+  handleHeatmapCallback = (data) =>{
+    this.setState({heatmap: JSON.parse(data)});
+    this.ros.heatmap.unsubscribe();
+  }
+
   // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
   componentWillUnmount() {}
 
 
   gpsCall = () => {
     // this.ros.gps.subscribe(this.handleBench1Callback);
-    console.log("setting state")
+    //console.log("setting state")
     var newLoc = {
-      long: this.state.bench1loc.long + 0.1,
+      long: this.state.bench1loc.long + 0.001,
       lat: this.state.bench1loc.lat,
     }
     this.setState({bench1loc: newLoc});
+  }
+
+  heatmapCall = () => {
+    // this.ros.heatmap.subscribe(this.handleHeatmapCallback);
   }
   
   state = {
@@ -78,14 +87,20 @@ export class AccountPage extends React.Component{
       long: benches.features[0].geometry.coordinates[0],
       lat: benches.features[0].geometry.coordinates[1]
     },
+    heatmap: {}
   }
 
   updateCoords = () => {
     this.gpsCall()
+    this.heatmapCall()
   }
 
-  getState = () => {
+  getCoords = () => {
     return this.state.bench1loc;
+  }
+
+  getHeatMap = () => {
+    return this.state.heatmap;
   }
 
 
@@ -93,7 +108,8 @@ export class AccountPage extends React.Component{
       return(
           <div className='AccountPage'>
               <div className='MapSide'>
-                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} updateHandler={ this.updateCoords } center={[0.51,0.61]} getCoords={ this.getState } className="map"/>
+                <nav id="menu"></nav>
+                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} updateHandler={ this.updateCoords } center={[0.51,0.61]} getCoords={ this.getCoords } getHeatmap={this.getHeatMap} className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">
