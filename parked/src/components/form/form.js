@@ -55,16 +55,16 @@ export default class Form extends React.Component{
         };
         return (
             <>
-            <h1>Move a Bench:</h1>
+            <h2>Move a Bench:</h2>
             <form>
                 {content.inputs.map((input,key) => {
                     return (
-                        <div key={key}>
+                        <div key={key} className="form-group mw-100 mh-100">
                             <p>
                                 <label className='label'>{input.label}</label>
                             </p>
                             <p>
-                                <input name={input.name} value={input.val} readOnly={true} className="input"/>
+                                <input name={input.name} value={input.val} readOnly={true} className="input form-control"/>
                             </p>
                         </div>
                     );

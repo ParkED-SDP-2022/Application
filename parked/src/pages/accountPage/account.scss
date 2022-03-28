@@ -33,27 +33,46 @@ $coral: rgba(255, 131, 96, 1);
 }
 
 .MoveForm {
+    display: flex;
+    flex-direction: column;
     background-color: $cultured;
+    color: $gunmetal;
     width: 30vw;
     height: 40vh;
-    margin-top: 10vh;
+    margin-top: 5vh;
     margin-left: 5vw;
-    padding: 5%;
+    padding: 3%;
     -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.2);
     -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.2);
     box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.2);
 }
 
-.MoveForm .label {
-    padding: 0;
-    margin: 0
-}
+// .MoveForm .title {
+//     display: flex;
+//     align-self: auto;
+//     // font-size: 2rem;
+//     // padding: 0;
+//     // margin: 0;
+// }
 
-.MoveForm .input {
-    line-height: 35px;
-    width: 23vw;
-    margin: 0;
-}
+// .MoveForm .label {
+//     display: flex;
+//     align-self: auto;
+//     //font-size: 0.8rem;
+//     padding: 0;
+//     margin: 0;
+//     box-sizing: content-box;
+// }
+
+// .MoveForm .input {
+//     display: flex;
+//     padding: 0;
+//     margin: 0;
+//     font-size: 1rem;
+//     line-height: 4vh;
+//     width: 23vw;
+//     margin: 0;
+// }
 
 .btn {
     color: #fff;
