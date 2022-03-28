@@ -91,7 +91,7 @@ export class JoystickController extends React.Component{
         return (
             <div className='d-flex flex-column justify-content-center align-items-center'>
               {this.state.showJoyStick && <div className='mb-4 d-flex flex-column justify-content-center align-items-center'>
-                <p className='display-6 mb-5' >Joystick</p>
+              <h2>Manual Navigation:</h2>
                 <Joystick
                   size={100}
                   baseColor="green"

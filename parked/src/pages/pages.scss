@@ -71,29 +71,33 @@ About Page Styling
 
 .AboutPage {
   display: flex;
+  flex-direction: column;
   height: 100vh;
 }
 
 .LeftSide {
-  display: flex;
+  position: fixed;
   width: 50vw;
   height: 100vh;
   background-color: $gunmetal;
+  z-index: -1;
 }
 
 .RightSide {
-  display: flex;
+  position: fixed;
+  left: 50vw;
   background-image: url("../assets/backgrounds/about-1.jpg");
   width: 50vw;
   height: 100vh;
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
+  z-index: -1;
 }
 
 .TitleDiv {
-  display: flex;
-  position: absolute;
+  //display: flex;
+  //position: absolute;
   width: 50vw;
   height: 20vh;
   padding-top: 5vh;
@@ -115,20 +119,38 @@ About Page Styling
   color: $cultured;
   line-height: 100%;
   vertical-align: middle;
+  z-index: 100;
+}
+
+.info-cards{
+  display: flex;
+  width: 100vw;
 }
 
 .aboutText{
-  height: 60vh;
+  //height: 60vh;
   width: 45vw;
   background-color: $cultured;
-  position: absolute;
-  margin-top: 35vh;
-  margin-left: 10vw;
+  position: static;
+  //margin-top: 35vh;
+  //margin-left: 10vw;
+  margin-bottom: 5vw;
   padding: 10px;
   -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.4);
   -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.4);
   box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.4);
   color: $gunmetal;
+  z-index: 100;
+}
+
+.aboutText.c1, .aboutText.c3 {
+  align-self: flex-start;
+  margin-left: 10vw;
+}
+
+.c2, .c4 {
+  align-self: flex-end;
+  margin-left: 40vw;
 }
 
 /*
