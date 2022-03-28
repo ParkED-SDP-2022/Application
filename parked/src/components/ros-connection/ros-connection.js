@@ -146,7 +146,7 @@ class RosConnection {
       this.gps = new this.ROSLIBR.Topic({
         ros: this.ros,
         name: '/heat_map_data',
-        messageType: 'std_msgs/String'
+        messageType: 'heat_map_data/String'
       });
   
       this.gps.advertise();

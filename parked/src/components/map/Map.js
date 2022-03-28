@@ -27,7 +27,6 @@ import ReactDOM from 'react-dom';
 import './map.scss';
 import markerImg from '../../assets/map/marker2.png';
 import heatmap_data from '../../assets/map/data.geojson';
-import '../../App.css';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
@@ -202,9 +201,9 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       map.getSource('benches').setData(geojson);
 
       // get and update the heat map data
-      //const heatmapData = getHeatMap()
-      //map.getSource('heatmap').setData(heatmapData);
-      }, 2000);
+      const heatmapData = getHeatMap()
+      map.getSource('heatmap').setData(heatmapData);
+      }, 1000);
 
     // define map behaviour when clicked:
     // - popup appears if a bench marker is clicked on
