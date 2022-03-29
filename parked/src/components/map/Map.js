@@ -25,7 +25,9 @@ import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
-import markerImg from '../../assets/map/marker2.png';
+import redMarkerImg from '../../assets/map/red marker 2.png';
+import greenMarkerImg from '../../assets/map/green marker 2.png';
+import blueMarkerImg from '../../assets/map/blue marker.png';
 import heatmap_data from '../../assets/map/data.geojson';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
@@ -56,7 +58,7 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
-  const geojson = data
+  const geojson = data;
 
   // initialize new map when component mounts
   useEffect(() => {
@@ -77,6 +79,7 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
   
     // define a new marker object used to specify update bench positions
     const marker = new mapboxgl.Marker({
+      //element: redMarkerImg,
       draggable: true
       })
       .setLngLat(center)
@@ -92,13 +95,31 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       map.resize();
 
       map.loadImage(
-        markerImg,
+        redMarkerImg,
         (error, image) => {
           if (error) throw error;
 
           // Add the image to the map style.
-          map.addImage('marker', image);
-        });      
+          map.addImage('red marker', image);
+        }); 
+        
+      map.loadImage(
+        greenMarkerImg,
+        (error, image) => {
+          if (error) throw error;
+
+          // Add the image to the map style.
+          map.addImage('green marker', image);
+        });
+
+        map.loadImage(
+          blueMarkerImg,
+          (error, image) => {
+            if (error) throw error;
+  
+            // Add the image to the map style.
+            map.addImage('blue marker', image);
+          });
 
       // Add a source with the park boundaries (includes a shaded area and solid outline)
       map.addSource('park', {
@@ -140,27 +161,11 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
         },
         'paint': {
           // Increase the heatmap weight based on frequency and property magnitude
-          'heatmap-weight': [
-            'interpolate',
-            ['linear'],
-            ['get', 'mag'],
-            0,
-            0,
-            6,
-            1
-          ],
+          //'heatmap-weight': ['interpolate',['linear'],['get', 'mag'],0,0,6,1],
           'heatmap-radius': 45,
           // Increase the heatmap color weight weight by zoom level
           // heatmap-intensity is a multiplier on top of heatmap-weight
-          'heatmap-intensity': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            0,
-            1,
-            9,
-            3
-          ],
+          'heatmap-intensity': ['interpolate',['linear'],['zoom'],0,1,9,3],
           'heatmap-weight': 0.3,
           // Transition from heatmap to circle layer by zoom level
           'heatmap-opacity': 0.7
@@ -170,10 +175,10 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       );
 
 
-      // Add a data source containing individual markers for each of the benches.
+      //Add a data source containing individual markers for each of the benches.
       map.addSource('benches', {
         'type': 'geojson',
-        'data': geojson
+        'data': data
         });
       map.addLayer({
         'id': 'bench_points',
@@ -181,12 +186,22 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
         'source': 'benches',
         'layout': {
           'visibility': 'visible',
-          'icon-image': 'marker',
+          'icon-image': 'red marker',
           'icon-offset': [10, -15]
           },
-        'filter': ['==', '$type', 'Point']
+        'filter': ['==', 'inUse', true]
       });
-      
+      map.addLayer({
+        'id': 'free_bench_points',
+        'type': 'symbol',
+        'source': 'benches',
+        'layout': {
+          'visibility': 'visible',
+          'icon-image': 'green marker',
+          'icon-offset': [10, -15]
+          },
+        'filter': ['==', 'inUse', false]
+      });      
     });
 
     //Update the bench source from the API every 2 seconds, to get the new gps positions
@@ -196,9 +211,9 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
 
       // Get and use the updated bench data
       const benchCoords = getCoords()
-      geojson.features[0].geometry.coordinates[0] = benchCoords.long;
-      geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
-      map.getSource('benches').setData(geojson);
+      //geojson.features[0].geometry.coordinates[0] = benchCoords.long;
+      //geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
+      //map.getSource('benches').setData(geojson);
 
       // get and update the heat map data
       const heatmapData = getHeatMap()
@@ -210,13 +225,12 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
     // That bench's ID is autofilled in the form using the benchID handler
     map.on("click", e => {
       const features = map.queryRenderedFeatures(e.point, {
-        layers: ["bench_points"],
+        layers: ["bench_points", "free_bench_points"],
       })
       if (features.length > 0) {
         const feature = features[0]
         // create popup node
         const popupNode = document.createElement("div")
-        console.log("clicked_bench: " + feature?.properties?.benchName)
         IDhandler(feature?.properties?.benchName)
         ReactDOM.render(
           <Popup 
@@ -255,7 +269,6 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       
       // Show or hide layer when the toggle is clicked.
       link.onclick = function (e) {
-        console.log('clicked')
         const clickedLayer = this.id;
         e.preventDefault();
         e.stopPropagation();
