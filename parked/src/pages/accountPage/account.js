@@ -62,7 +62,7 @@ export class AccountPage extends React.Component{
 
 
   gpsCall = () => {
-    // this.ros.gps.subscribe(this.handleBench1Callback);
+    this.ros.gps.subscribe(this.handleBench1Callback);
     console.log("setting state")
     var newLoc = {
       long: this.state.bench1loc.long + 0.1,

@@ -143,7 +143,7 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
       console.log("bench data: " + geojson.features[0].geometry.coordinates[0]);
       map.getSource('benches').setData(geojson);
-      }, 5000);
+      }, 3000);
 
     map.on("click", e => {
       const features = map.queryRenderedFeatures(e.point, {
