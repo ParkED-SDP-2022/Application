@@ -18,59 +18,9 @@ export class AccountPage extends React.Component{
 
   constructor(props){
     super(props);
-
-    this.gpsCall = this.gpsCall.bind(this);
-
-
-    this.state = {
-      benchID: "",
-      location: "",
-      bench1loc: {
-        long: benches.features[0].geometry.coordinates[0] + 1,
-        lat: benches.features[0].geometry.coordinates[1]
-      },
-    }
-
-    
-  }
-
-  componentDidMount() {
-    this.ros = new RosConnection();
-    this.ros.checkConnection();
-  }
-
-  handleIDCallback = (bench) =>{
-      this.setState({benchID: bench})
-  }
-
-  handleLocationCallback = (loc) =>{
-    this.setState({location: loc})
-  }
-
-  handleBench1Callback = (loc) =>{
-    console.log("loc: " + loc.lat)
-    this.setState({bench1loc: {
-      long: loc.long,
-      lat: loc.lat
-    }});
-    console.log(this.state)
-    this.ros.gps.unsubscribe();
-  }
-
-  // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
-  componentWillUnmount() {}
-
-
-  gpsCall = () => {
-    this.ros.gps.subscribe(this.handleBench1Callback);
-    console.log("setting state")
-    var newLoc = {
-      long: this.state.bench1loc.long + 0.1,
-      lat: this.state.bench1loc.lat,
-    }
-    this.setState({bench1loc: newLoc});
   }
   
+  // The page state which tracks data for sharing with child components
   state = {
     benchID: "",
     location: "",
@@ -78,14 +28,63 @@ export class AccountPage extends React.Component{
       long: benches.features[0].geometry.coordinates[0],
       lat: benches.features[0].geometry.coordinates[1]
     },
+    heatmap: {}
   }
 
-  updateCoords = () => {
-    this.gpsCall()
+  // Setup the ros connection upon mounting
+  //TODO: unmount at the end?
+  componentDidMount() {
+    this.ros = new RosConnection();
+    this.ros.checkConnection();
   }
 
-  getState = () => {
+
+  /*** Form Auto Filling from Map ***/
+
+  // A handler used to get the ID of a clicked bench from the map component
+  handleIDCallback = (bench) =>{
+      this.setState({benchID: bench})
+  }
+
+  // A handler to get the coordinates of a position on the map when a marker is dragged there
+  handleNewLocationCallback = (loc) =>{
+    this.setState({location: loc})
+  }
+
+  
+  /*** Ros Subscription and Map Updating ***/
+
+  // updateState updates the parent component state so the map can access updates fields
+  updateState = () => {
+    this.ros.gps.subscribe(this.handleBenchCoordsCallback);
+    this.ros.heatmap.subscribe(this.handleHeatmapCallback);
+  }
+
+  // The callback for a ros subscriber which gets updated bench coordinates
+  handleBenchCoordsCallback = (loc) =>{
+    //console.log("loc: " + loc.lat)
+    this.setState({bench1loc: {
+      long: loc.long,
+      lat: loc.lat
+    }});
+    console.log(this.state)
+    this.ros.gps.unsubscribe();
+  }
+  
+  // The callback for a ros subscription which gets updated heatmap points
+  handleHeatmapCallback = (data) =>{
+    this.setState({heatmap: JSON.parse(data)});
+    this.ros.heatmap.unsubscribe();
+  }
+
+  // method which allows Map component to recieve updated states
+  getCoords = () => {
     return this.state.bench1loc;
+  }
+
+  // method which allows Map component to recieve updated states
+  getHeatMap = () => {
+    return this.state.heatmap;
   }
 
 
@@ -93,7 +92,8 @@ export class AccountPage extends React.Component{
       return(
           <div className='AccountPage'>
               <div className='MapSide'>
-                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleLocationCallback} updateHandler={ this.updateCoords } center={[0.51,0.61]} getCoords={ this.getState } className="map"/>
+                <nav id="menu"></nav>
+                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={ this.updateState } center={[0.51,0.61]} getCoords={ this.getCoords } getHeatmap={this.getHeatMap} className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">

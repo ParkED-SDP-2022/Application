@@ -141,6 +141,17 @@ class RosConnection {
       this.gps.advertise();
     }
 
+    initHeatmapTopic(){
+      // Init topic object
+      this.gps = new this.ROSLIBR.Topic({
+        ros: this.ros,
+        name: '/heat_map_data',
+        messageType: 'heat_map_data/String'
+      });
+  
+      this.gps.advertise();
+    }
+
     instructionAction(dest){
       var goal = new this.ROSLIBR.Goal({
         actionClient : this.instructionClient,

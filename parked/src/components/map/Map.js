@@ -9,6 +9,10 @@
  * https://www.lostcreekdesigns.co/writing/how-to-create-a-map-popup-component-using-mapbox-and-react/
  * 
  * https://docs.mapbox.com/mapbox-gl-js/example/live-geojson/
+ * https://docs.mapbox.com/mapbox-gl-js/example/live-update-feature/
+ * 
+ * https://docs.mapbox.com/mapbox-gl-js/example/heatmap-layer/
+ * https://docs.mapbox.com/mapbox-gl-js/example/toggle-layers/
  * 
  * Currently a temporary "dummy" map which centres on george square
  * 
@@ -21,12 +25,17 @@ import React, { useRef, useEffect } from 'react';
 import mapboxgl from 'mapbox-gl';
 import ReactDOM from 'react-dom';
 import './map.scss';
-import markerImg from '../../assets/map/marker2.png';
-import '../../App.css';
+import redMarkerImg from '../../assets/map/red marker 2.png';
+import greenMarkerImg from '../../assets/map/green marker 2.png';
+import blueMarkerImg from '../../assets/map/blue marker.png';
+import heatmap_data from '../../assets/map/data.geojson';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
-
+/**
+ * Popup defines a popup box item which appears when clicking on a bench icon on the map
+ *
+ */
 const Popup = ({ benchName, battery, inUse }) => (
   <div className="popup bench-marker">
     <div className="bench-metric-row">
@@ -45,13 +54,13 @@ const Popup = ({ benchName, battery, inUse }) => (
 )
 
 
-const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandler, getCoords } ) => {
+const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandler, getCoords, getHeatMap } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
-  const geojson = data
+  const geojson = data;
 
-  // initialize map when component mounts
+  // initialize new map when component mounts
   useEffect(() => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current,
@@ -62,12 +71,15 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       interactive: true
     });
   
+    // When a marker has been dragged, record its new location for the form
     function onDragEnd() {
       const lngLat = marker.getLngLat();
       locHandler(lngLat)
     }
   
+    // define a new marker object used to specify update bench positions
     const marker = new mapboxgl.Marker({
+      //element: redMarkerImg,
       draggable: true
       })
       .setLngLat(center)
@@ -78,18 +90,38 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
     
+    // Add features and layers to the map when it loads
     map.on('load', () => {
       map.resize();
 
       map.loadImage(
-        markerImg,
+        redMarkerImg,
         (error, image) => {
           if (error) throw error;
 
           // Add the image to the map style.
-          map.addImage('marker', image);
-        });      
+          map.addImage('red marker', image);
+        }); 
+        
+      map.loadImage(
+        greenMarkerImg,
+        (error, image) => {
+          if (error) throw error;
 
+          // Add the image to the map style.
+          map.addImage('green marker', image);
+        });
+
+        map.loadImage(
+          blueMarkerImg,
+          (error, image) => {
+            if (error) throw error;
+  
+            // Add the image to the map style.
+            map.addImage('blue marker', image);
+          });
+
+      // Add a source with the park boundaries (includes a shaded area and solid outline)
       map.addSource('park', {
         'type': 'geojson',
         'data': parkBoundaries //test file of boundaries
@@ -114,11 +146,39 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
           }
       });
 
+      // Add a heatmap layer to the map showing spots where benches get used
+      map.addSource('heatmap', {
+        'type': 'geojson',
+        'data': heatmap_data
+        });
+      map.addLayer({
+        'id': 'popularity_heatmap',
+        'type': 'heatmap',
+        'source': 'heatmap',
+        'maxzoom': 9,
+        'layout': {
+          'visibility': 'none',
+        },
+        'paint': {
+          // Increase the heatmap weight based on frequency and property magnitude
+          //'heatmap-weight': ['interpolate',['linear'],['get', 'mag'],0,0,6,1],
+          'heatmap-radius': 45,
+          // Increase the heatmap color weight weight by zoom level
+          // heatmap-intensity is a multiplier on top of heatmap-weight
+          'heatmap-intensity': ['interpolate',['linear'],['zoom'],0,1,9,3],
+          'heatmap-weight': 0.3,
+          // Transition from heatmap to circle layer by zoom level
+          'heatmap-opacity': 0.7
+        }
+      },
+      'waterway-label'
+      );
 
-      // Add a data source containing benches.
+
+      //Add a data source containing individual markers for each of the benches.
       map.addSource('benches', {
         'type': 'geojson',
-        'data': geojson //test file of boundaries
+        'data': data
         });
       map.addLayer({
         'id': 'bench_points',
@@ -126,34 +186,51 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
         'source': 'benches',
         'layout': {
           'visibility': 'visible',
-          'icon-image': 'marker',
+          'icon-image': 'red marker',
           'icon-offset': [10, -15]
           },
-        'filter': ['==', '$type', 'Point']
+        'filter': ['==', 'inUse', true]
       });
-      
+      map.addLayer({
+        'id': 'free_bench_points',
+        'type': 'symbol',
+        'source': 'benches',
+        'layout': {
+          'visibility': 'visible',
+          'icon-image': 'green marker',
+          'icon-offset': [10, -15]
+          },
+        'filter': ['==', 'inUse', false]
+      });      
     });
 
-    //Update the source from the API every 2 seconds.
+    //Update the bench source from the API every 2 seconds, to get the new gps positions
     const updateSource = setInterval(async () => {
+      // Tell the arent to get new data
       updateHandler();
-      const benchCoords = getCoords()
-      console.log("child reading from parent: " + benchCoords.long);
-      geojson.features[0].geometry.coordinates[0] = benchCoords.long;
-      geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
-      console.log("bench data: " + geojson.features[0].geometry.coordinates[0]);
-      map.getSource('benches').setData(geojson);
-      }, 3000);
 
+      // Get and use the updated bench data
+      const benchCoords = getCoords()
+      //geojson.features[0].geometry.coordinates[0] = benchCoords.long;
+      //geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
+      //map.getSource('benches').setData(geojson);
+
+      // get and update the heat map data
+      const heatmapData = getHeatMap()
+      map.getSource('heatmap').setData(heatmapData);
+      }, 1000);
+
+    // define map behaviour when clicked:
+    // - popup appears if a bench marker is clicked on
+    // That bench's ID is autofilled in the form using the benchID handler
     map.on("click", e => {
       const features = map.queryRenderedFeatures(e.point, {
-        layers: ["bench_points"],
+        layers: ["bench_points", "free_bench_points"],
       })
       if (features.length > 0) {
         const feature = features[0]
         // create popup node
         const popupNode = document.createElement("div")
-        console.log("clicked_bench: " + feature?.properties?.benchName)
         IDhandler(feature?.properties?.benchName)
         ReactDOM.render(
           <Popup 
@@ -170,9 +247,59 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       }
     });
 
-    // clean up on unmount
-    return () => map.remove();
-  }, []);
+    // After the last frame rendered before the map enters an "idle" state.
+    map.on('idle', () => {
+      const id = 'popularity_heatmap';
+
+      // If these two layers were not added to the map, abort
+      if (!map.getLayer(id)) {
+        return;
+      }
+      
+      if (document.getElementById(id)) {
+        return;
+      }
+      
+      // Create a link.
+      const link = document.createElement('a');
+      link.id = id;
+      link.href = '#';
+      link.textContent = 'Location Popularity';
+      link.className = '';
+      
+      // Show or hide layer when the toggle is clicked.
+      link.onclick = function (e) {
+        const clickedLayer = this.id;
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const visibility = map.getLayoutProperty(
+        clickedLayer,
+        'visibility'
+        );
+        
+        // Toggle layer visibility by changing the layout object's visibility property.
+        if (visibility === 'visible') {
+          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+          this.className = '';
+        } else {
+          this.className = 'active';
+          map.setLayoutProperty(
+            clickedLayer,
+            'visibility',
+            'visible'
+          );
+        }
+      };
+      
+      const layers = document.getElementById('menu');
+      layers.appendChild(link);
+      
+      });
+
+        // clean up on unmount
+        return () => map.remove();
+      }, []);
 
   return <div className="map-container" ref={mapContainerRef} />;
 };
