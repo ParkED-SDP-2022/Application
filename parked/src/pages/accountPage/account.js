@@ -56,8 +56,14 @@ export class AccountPage extends React.Component{
 
   // updateState updates the parent component state so the map can access updates fields
   updateState = () => {
-    this.ros.gps.subscribe(this.handleBenchCoordsCallback);
+    console.log("updating state");
+    //this.ros.gps.subscribe(this.handleBenchCoordsCallback);
     this.ros.heatmap.subscribe(this.handleHeatmapCallback);
+    /* TEST */
+    // console.log("heatmap: " + this.state.heatmap.features);
+    // this.setState({heatmap: JSON.parse('{"type": "FeatureCollection","features": [{"type": "Feature","properties": {},"geometry": {"type": "Point","coordinates": [0.208740234375,0.7388100915908471]}}]}')});
+    // console.log("new heatmap: " + this.state.heatmap.features);
+    /* END TEST */
   }
 
   // The callback for a ros subscriber which gets updated bench coordinates
@@ -68,6 +74,7 @@ export class AccountPage extends React.Component{
       lat: loc.lat
     }});
     console.log(this.state)
+    //TODO: use Rory's message instead
     this.ros.gps.unsubscribe();
   }
   
@@ -79,11 +86,13 @@ export class AccountPage extends React.Component{
 
   // method which allows Map component to recieve updated states
   getCoords = () => {
+    console.log("getting coords");
     return this.state.bench1loc;
   }
 
   // method which allows Map component to recieve updated states
   getHeatMap = () => {
+    console.log("returning heatmap");
     return this.state.heatmap;
   }
 
@@ -93,7 +102,7 @@ export class AccountPage extends React.Component{
           <div className='AccountPage'>
               <div className='MapSide'>
                 <nav id="menu"></nav>
-                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={ this.updateState } center={[0.51,0.61]} getCoords={ this.getCoords } getHeatmap={this.getHeatMap} className="map"/>
+                <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={ this.updateState } center={[0.51,0.61]} getCoords={ this.getCoords } getHeatMap={this.getHeatMap} className="map"/>
               </div>
             <div className='ControlSide'>
                 <div className="MoveForm">

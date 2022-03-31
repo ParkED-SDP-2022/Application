@@ -143,13 +143,13 @@ class RosConnection {
 
     initHeatmapTopic(){
       // Init topic object
-      this.gps = new this.ROSLIBR.Topic({
+      this.heatmap = new this.ROSLIBR.Topic({
         ros: this.ros,
         name: '/heat_map_data',
         messageType: 'heat_map_data/String'
       });
   
-      this.gps.advertise();
+      this.heatmap.advertise();
     }
 
     instructionAction(dest){

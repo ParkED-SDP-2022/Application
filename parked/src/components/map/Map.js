@@ -206,19 +206,21 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
 
     //Update the bench source from the API every 2 seconds, to get the new gps positions
     const updateSource = setInterval(async () => {
+      console.log("updating");
       // Tell the arent to get new data
       updateHandler();
-
+      console.log("getting bench");
       // Get and use the updated bench data
-      const benchCoords = getCoords()
+      const benchCoords = getCoords();
       //geojson.features[0].geometry.coordinates[0] = benchCoords.long;
       //geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
       //map.getSource('benches').setData(geojson);
-
+      console.log("getting hm");
       // get and update the heat map data
-      const heatmapData = getHeatMap()
+      const heatmapData = getHeatMap();
+      console.log("retrieved heatmap: " + heatmapData.features);
       map.getSource('heatmap').setData(heatmapData);
-      }, 1000);
+      }, 5000);
 
     // define map behaviour when clicked:
     // - popup appears if a bench marker is clicked on
