@@ -73,7 +73,7 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
 
     map.fitBounds([
       [-0.1044,	-0.1923], // southwestern corner of the bounds
-      [1.4171,	1.2085] // northeastern corner of the bounds
+      [1.4171,	1.3085] // northeastern corner of the bounds
       ]);
   
     // When a marker has been dragged, record its new location for the form
