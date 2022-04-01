@@ -23,7 +23,7 @@ function Nav() {
         <menu className="items-wrapper">
               <Link to="/" className={"link-styles fa fa-home"}></Link>
               <Link to="/about" className={"link-styles fa fa-address-card"}></Link>
-              <Link to="/account" className={"link-styles fa fa-user"}></Link>
+              <Link to="/account" className={"link-styles fa fa-map"}></Link>
         </menu>
 
       </div>

@@ -39,15 +39,15 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzM
 const Popup = ({ benchName, battery, inUse }) => (
   <div className="popup bench-marker">
     <div className="bench-metric-row">
-      <h4 className="row-title">Bench Number:</h4>
+      <h4 className="row-title">Bench Num:</h4>
       <div className="row-value">{benchName}</div>
     </div>
     <div className="bench-metric-row">
       <h4 className="row-title">Status:</h4>
-      <div className="row-value">{inUse ? "Occupied" : "Unoccupied"}</div>
+      <div className="row-value">{inUse ? "Used" : "Free"}</div>
     </div>
     <div className="bench-metric-row">
-      <h4 className="row-title">Current Battery Power:</h4>
+      <h4 className="row-title">Battery:</h4>
       <div className="row-value">{battery}%</div>
     </div>
   </div>
@@ -70,6 +70,11 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       zoom: 8.3,
       interactive: true
     });
+
+    map.fitBounds([
+      [-0.1044,	-0.1923], // southwestern corner of the bounds
+      [1.4171,	1.2085] // northeastern corner of the bounds
+      ]);
   
     // When a marker has been dragged, record its new location for the form
     function onDragEnd() {
