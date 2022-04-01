@@ -204,6 +204,10 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       });      
     });
 
+    map.on('idle',function(){
+      map.resize()
+      })
+
     //Update the bench source from the API every 2 seconds, to get the new gps positions
     const updateSource = setInterval(async () => {
       console.log("updating");

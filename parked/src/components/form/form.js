@@ -56,7 +56,7 @@ export default class Form extends React.Component{
         return (
             <>
             <h2>Move a Bench:</h2>
-            <form>
+            <form className="FormInputs">
                 {content.inputs.map((input,key) => {
                     return (
                         <div key={key} className="form-group mw-100 mh-100">
