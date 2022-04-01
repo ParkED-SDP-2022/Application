@@ -17,13 +17,36 @@ Home Page Styling
 
 */
 .HomePage {
+  height: 100vh;
+  width: 100%;
+  //position: fixed;
+  // background-image: url("../assets/backgrounds/home-2.jpg");
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-size: cover;
+}
+
+.home-bg {
     height: 100vh;
     width: 100%;
+    min-height: 100%;
+    top:0;
+    left:0;
     position: fixed;
     background-image: url("../assets/backgrounds/home-2.jpg");
+    opacity: 0.5;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+.home-ol {
+  height: 100vh;
+  width: 100%;
+  min-height: 100%;
+  top:0;
+  left:0;
+  position: fixed;
+  background-color: rgba(65, 147, 65, 0.4);
 }
 
 .Home {

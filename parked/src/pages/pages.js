@@ -34,6 +34,8 @@ function Nav() {
 export function Home() {
     return (
         <div className="HomePage">
+          <div className="home-bg"></div>
+          <div className="home-ol"></div>
           <div className="Home">
             <div className="logoDiv">
               <img src={require('../assets/branding/logo.png')} className='logo'/>

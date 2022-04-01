@@ -104,8 +104,9 @@ export class AccountPage extends React.Component{
               <div className='MapSide'>
                 <Map parkBoundaries={testMap} data={benches}  IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={ this.updateState } center={[0.51,0.61]} getCoords={ this.getCoords } getHeatMap={this.getHeatMap} className="map"/>
               </div>
+            
+            <div className="cs-background" />
             <div className='ControlSide'>
-                <div className="background" />
                 <div className="MoveForm">
                     <Form benchID={this.state.benchID} loc={this.state.location}/>
                 </div>
