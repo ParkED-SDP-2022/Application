@@ -322,7 +322,7 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
 
         // clean up on unmount
         return () => map.remove();
-      }, []);
+      }, [live]);
 
   return <div className="map-container" ref={mapContainerRef} />;
 };

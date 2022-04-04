@@ -26,7 +26,7 @@ export class AccountPage extends React.Component{
   
   // The page state which tracks data for sharing with child components
   state = {
-    realMap: false,
+    realMap: true,
     benchID: "",
     location: "",
     benchcoords: {},
@@ -45,12 +45,12 @@ export class AccountPage extends React.Component{
 
   // A handler used to get the ID of a clicked bench from the map component
   handleIDCallback = (bench) =>{
-      this.setState({benchID: bench})
+      this.setState({benchID: bench});
   }
 
   // A handler to get the coordinates of a position on the map when a marker is dragged there
   handleNewLocationCallback = (loc) =>{
-    this.setState({location: loc})
+    this.setState({location: loc});
   }
 
   
