@@ -41,6 +41,7 @@ class RosConnection {
         this.initTeleopKeyboard();
         this.initOdomTopic();
         this.initGPSTopic();
+        this.initHeatmapTopic();
 
     }
     
@@ -146,7 +147,7 @@ class RosConnection {
       this.heatmap = new this.ROSLIBR.Topic({
         ros: this.ros,
         name: '/heat_map_data',
-        messageType: 'heat_map_data/String'
+        messageType: 'std_msgs/String'
       });
   
       this.heatmap.advertise();

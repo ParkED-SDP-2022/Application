@@ -50,14 +50,13 @@ export class AccountPage extends React.Component{
   handleNewLocationCallback = (loc) =>{
     this.setState({location: loc})
   }
-
   
   /*** Ros Subscription and Map Updating ***/
 
   // updateState updates the parent component state so the map can access updates fields
   updateState = () => {
-    console.log("updating state");
-    //this.ros.gps.subscribe(this.handleBenchCoordsCallback);
+    console.log("subscribing");
+    // this.ros.gps.subscribe(this.handleBenchCoordsCallback);
     this.ros.heatmap.subscribe(this.handleHeatmapCallback);
     /* TEST */
     // console.log("heatmap: " + this.state.heatmap.features);
@@ -68,20 +67,23 @@ export class AccountPage extends React.Component{
 
   // The callback for a ros subscriber which gets updated bench coordinates
   handleBenchCoordsCallback = (loc) =>{
-    //console.log("loc: " + loc.lat)
+    console.log("loc: " + loc.lat);
     this.setState({bench1loc: {
       long: loc.long,
       lat: loc.lat
     }});
-    console.log(this.state)
+    console.log(this.state);
     //TODO: use Rory's message instead
-    this.ros.gps.unsubscribe();
+    // this.ros.gps.unsubscribe();
   }
   
   // The callback for a ros subscription which gets updated heatmap points
   handleHeatmapCallback = (data) =>{
-    this.setState({heatmap: JSON.parse(data)});
-    this.ros.heatmap.unsubscribe();
+    //console.log("calling back");
+    console.log(data.data);
+    this.setState({heatmap: JSON.parse(data.data)});
+    //this.ros.heatmap.unsubscribe();
+    console.log(this.state.heatmap);
   }
 
   // method which allows Map component to recieve updated states
