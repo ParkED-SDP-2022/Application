@@ -111,6 +111,7 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
     // Add features and layers to the map when it loads
     map.on('load', () => {
       updateHandler();
+      updateHandler();
       map.resize();
 
       map.loadImage(
@@ -231,7 +232,7 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
       const updateSource = setInterval(async () => {
         console.log("updating");
         // Tell the arent to get new data
-        updateHandler();
+        //updateHandler();
         console.log("getting bench");
         // Get and use the updated bench data
         const benchCoords = getCoords();

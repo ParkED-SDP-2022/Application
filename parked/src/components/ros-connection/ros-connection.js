@@ -133,6 +133,7 @@ class RosConnection {
 
     initGPSTopic(){
       // Init topic object
+      console.log("Initilising topic");
       this.benchlocs = new this.ROSLIBR.Topic({
         ros: this.ros,
         name: '/bench_state_data',
