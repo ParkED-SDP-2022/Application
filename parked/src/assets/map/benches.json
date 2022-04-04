@@ -6,7 +6,7 @@
         "properties": {
           "benchName":1,
           "battery":100,
-          "inUse":false
+          "inUse":true
         },
         "geometry": {
           "type": "Point",
@@ -36,7 +36,7 @@
         "properties": {
           "benchName":3,
           "battery":100,
-          "inUse":false
+          "inUse":true
         },
         "geometry": {
           "type": "Point",
@@ -111,7 +111,7 @@
         "properties": {
           "benchName":8,
           "battery":100,
-          "inUse":false
+          "inUse":true
         },
         "geometry": {
           "type": "Point",

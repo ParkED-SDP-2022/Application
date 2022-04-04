@@ -133,13 +133,13 @@ class RosConnection {
 
     initGPSTopic(){
       // Init topic object
-      this.gps = new this.ROSLIBR.Topic({
+      this.benchlocs = new this.ROSLIBR.Topic({
         ros: this.ros,
-        name: '/robot_position_longlat',
-        messageType: 'parked_custom_msgs/Point'
+        name: '/bench_state_data',
+        messageType: 'std_msgs/String'
       });
   
-      this.gps.advertise();
+      this.benchlocs.advertise();
     }
 
     initHeatmapTopic(){

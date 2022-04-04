@@ -23,7 +23,7 @@ function Nav() {
         <menu className="items-wrapper">
               <Link to="/" className={"link-styles fa fa-home"}></Link>
               <Link to="/about" className={"link-styles fa fa-address-card"}></Link>
-              <Link to="/account" className={"link-styles fa fa-user"}></Link>
+              <Link to="/account" className={"link-styles fa fa-map"}></Link>
         </menu>
 
       </div>
@@ -34,6 +34,8 @@ function Nav() {
 export function Home() {
     return (
         <div className="HomePage">
+          <div className="home-bg"></div>
+          <div className="home-ol"></div>
           <div className="Home">
             <div className="logoDiv">
               <img src={require('../assets/branding/logo.png')} className='logo'/>

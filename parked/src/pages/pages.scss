@@ -17,11 +17,36 @@ Home Page Styling
 
 */
 .HomePage {
+  height: 100vh;
+  width: 100%;
+  //position: fixed;
+  // background-image: url("../assets/backgrounds/home-2.jpg");
+  // background-position: center;
+  // background-repeat: no-repeat;
+  // background-size: cover;
+}
+
+.home-bg {
     height: 100vh;
+    width: 100%;
+    min-height: 100%;
+    top:0;
+    left:0;
+    position: fixed;
     background-image: url("../assets/backgrounds/home-2.jpg");
+    opacity: 0.5;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+}
+.home-ol {
+  height: 100vh;
+  width: 100%;
+  min-height: 100%;
+  top:0;
+  left:0;
+  position: fixed;
+  background-color: rgba(65, 147, 65, 0.4);
 }
 
 .Home {
@@ -45,8 +70,9 @@ Home Page Styling
     height: 100%;
     width: auto;
 }
+
 .textDiv {
-    height: 17vh;
+    //height: 17vh;
     width: 50vw;
     background-color: $green-pantone;
     position: absolute;
@@ -57,6 +83,22 @@ Home Page Styling
     -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.4);
     box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.4);
     color: white;
+}
+
+@media only screen and (max-width: 700px) {
+  .logo {
+    width: 100%;
+    height: auto;
+  }
+
+  .logoDiv {
+    width: 50vw;
+    height: auto;
+  }
+
+  .textDiv{
+    margin-top: 60vw;
+  }
 }
 
 .textDiv h2 {
@@ -95,17 +137,26 @@ About Page Styling
   z-index: -1;
 }
 
+@media only screen and (max-width: 900px) {
+  .LeftSide{
+    display: none;
+  }
+
+  .RightSide{
+    left: 0;
+    width:100vw;
+    height:100vh;
+  }
+}
+
 .TitleDiv {
-  //display: flex;
-  //position: absolute;
-  width: 50vw;
-  height: 20vh;
   padding-top: 5vh;
   padding-left: 2vw;
+  width: 70vw;
   background: $green-pantone;
   z-index: 9;
   margin: 10vh;
-  margin-left: 20vh;
+  margin-left: 10vw;
   line-height: 100%;
   -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.1);
@@ -143,7 +194,7 @@ About Page Styling
   z-index: 100;
 }
 
-.aboutText.c1, .aboutText.c3 {
+.c1, .c3 {
   align-self: flex-start;
   margin-left: 10vw;
 }
@@ -151,6 +202,21 @@ About Page Styling
 .c2, .c4 {
   align-self: flex-end;
   margin-left: 40vw;
+}
+
+@media only screen and (max-width: 900px) {
+  .TitleDiv {
+  width: 80vw;
+  }
+
+  .aboutText{
+    width: 80vw;
+  }
+
+  .c1, .c2, .c3, .c4{
+    align-self: flex-start;
+    margin-left: 10vw;
+  }
 }
 
 /*
@@ -161,6 +227,7 @@ Circular Nav Menu Stuff
     position: fixed;
     bottom: 1em;
     right: 1em;
+    z-index: 1000;
   }
   
   .circular-menu .floating-btn {
@@ -169,7 +236,7 @@ Circular Nav Menu Stuff
     height: 3.5em;
     border-radius: 50%;
     background-color: rgba(75, 167, 75);
-    box-shadow: 0 2px 5px 0 hsla(0, 0%, 0%, .26);  
+    box-shadow: 0 2px 5px 0 hsla(0, 0, 0, .26);  
     color: hsl(0, 0%, 100%);
     text-align: center;
     line-height: 3.9;
@@ -205,6 +272,7 @@ Circular Nav Menu Stuff
     right: 0;
     z-index: -2;
     background-color: rgba(75, 167, 75);
+    box-shadow: 0 4px 8px 0 hsla(0, 0%, 0%, .4);
     transition: all .3s ease;
   }
   
