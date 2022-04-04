@@ -28,7 +28,7 @@ import './map.scss';
 import redMarkerImg from '../../assets/map/red marker 2.png';
 import greenMarkerImg from '../../assets/map/green marker 2.png';
 import blueMarkerImg from '../../assets/map/blue marker.png';
-import heatmap_data from '../../assets/map/data.geojson';
+import heatmap_data from '../../assets/map/fake_data.geojson';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
@@ -53,12 +53,28 @@ const Popup = ({ benchName, battery, inUse }) => (
   </div>
 )
 
-
-const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandler, getCoords, getHeatMap } ) => {
+/**
+ * 
+ * @param {*} param0 
+ * park boundaries is the geojson object defining the outline of the park and any obstacles in it
+ * data id the geojson object containing all of the bench points and their properties
+ * TODO: heatmap
+ * IDhandler is the function which allows updating of the form to reflect the ID of the clicked bench
+ * locHandler allows updating of the form to show the location of the dragged-and-dropped marker
+ * center is the center point of the map
+ * TODO: bounds
+ * updateHandler is the function which tells the parent to update its geojson data from ros
+ * getCoords returns the updated bench data geojson object from the parent
+ * getHeatMap returns the updated heatmap data from the parent
+ * live specifies if the map should update its data or remain static
+ * @returns 
+ */
+const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, center, bounds, updateHandler, getCoords, getHeatMap, live } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
-  const geojson = data;
+  const geojson = benchData; //TODO: could this use the getter function instead? to reduce params
+  //const heatmap_data = heatmapData;
 
   // initialize new map when component mounts
   useEffect(() => {
@@ -71,10 +87,7 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       interactive: true
     });
 
-    map.fitBounds([
-      [-0.1044,	-0.1923], // southwestern corner of the bounds
-      [1.4171,	1.3085] // northeastern corner of the bounds
-      ]);
+    map.fitBounds(bounds);
   
     // When a marker has been dragged, record its new location for the form
     function onDragEnd() {
@@ -160,7 +173,6 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
         'id': 'popularity_heatmap',
         'type': 'heatmap',
         'source': 'heatmap',
-        'maxzoom': 9,
         'layout': {
           'visibility': 'none',
         },
@@ -183,7 +195,7 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       //Add a data source containing individual markers for each of the benches.
       map.addSource('benches', {
         'type': 'geojson',
-        'data': data
+        'data': geojson
         });
       map.addLayer({
         'id': 'bench_points',
@@ -213,23 +225,23 @@ const Map = ( { parkBoundaries, data, IDhandler, locHandler, center, updateHandl
       map.resize()
       })
 
-    //Update the bench source from the API every 2 seconds, to get the new gps positions
-    const updateSource = setInterval(async () => {
-      console.log("updating");
-      // Tell the arent to get new data
-      updateHandler();
-      console.log("getting bench");
-      // Get and use the updated bench data
-      const benchCoords = getCoords();
-      //geojson.features[0].geometry.coordinates[0] = benchCoords.long;
-      //geojson.features[0].geometry.coordinates[1] = benchCoords.lat;
-      //map.getSource('benches').setData(geojson);
-      console.log("getting hm");
-      // get and update the heat map data
-      const heatmapData = getHeatMap();
-      console.log("retrieved heatmap: " + heatmapData.features);
-      map.getSource('heatmap').setData(heatmapData);
-      }, 5000);
+    if (live) {
+      //Update the bench source from the API every 2 seconds, to get the new gps positions
+      const updateSource = setInterval(async () => {
+        console.log("updating");
+        // Tell the arent to get new data
+        updateHandler();
+        console.log("getting bench");
+        // Get and use the updated bench data
+        const benchCoords = getCoords();
+        map.getSource('benches').setData(benchCoords);
+        console.log("getting hm");
+        // get and update the heat map data
+        const heatmapData = getHeatMap();
+        console.log("retrieved heatmap: " + heatmapData.features);
+        map.getSource('heatmap').setData(heatmapData);
+        }, 2000);
+      }
 
     // define map behaviour when clicked:
     // - popup appears if a bench marker is clicked on

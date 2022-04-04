@@ -202,7 +202,7 @@ $coral: rgba(255, 131, 96, 1);
     }
 }
 
-#menu {
+.menu {
 background: $gunmetal;
 position: fixed;
 z-index: 1;
@@ -212,7 +212,7 @@ margin: 3vh;
 box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.2);
 }
     
-#menu a {
+.menu a {
 font-size: 1em;
 color: $cultured;
 display: block;
@@ -223,11 +223,11 @@ text-decoration: none;
 text-align: center;
 }
     
-#menu a:last-child {
+.menu a:last-child {
 border: none;
 }
     
-#menu a.active {
+.menu a.active {
 background-color: $cultured;
 color: $gunmetal;
 }
