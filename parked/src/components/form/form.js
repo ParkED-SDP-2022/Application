@@ -39,21 +39,6 @@ export default class Form extends React.Component{
     }
 
     render() {
-        //console.log(this.props)
-        // var content = {
-        //     inputs: [
-        //         {
-        //             label: 'Bench Number',
-        //             name: 'bench_num',
-        //             val: this.props.benchID,
-        //         },
-        //         {
-        //             label: 'New Location',
-        //             name: 'loc',
-        //             val: this.props.loc,
-        //         },
-        //     ],
-        // };
         return (
             <>
             <h2>Move a Bench:</h2>

@@ -21,7 +21,8 @@ export class AccountPage extends React.Component{
 
   constructor(props){
     super(props);
-    this.handleLive=this.handleLive.bind(this)
+    this.handleLive=this.handleLive.bind(this);
+    this.handleOldLocationCallback=this.handleOldLocationCallback.bind(this);
   }
   
   // The page state which tracks data for sharing with child components
@@ -51,6 +52,11 @@ export class AccountPage extends React.Component{
   // A handler to get the coordinates of a position on the map when a marker is dragged there
   handleNewLocationCallback = (loc) =>{
     this.setState({location: loc});
+  }
+
+  // A handler to get the coordinates of a position on the map when a marker is dragged there
+  handleOldLocationCallback = (loc) =>{
+    this.setState({old_location: loc});
   }
   
   /*** Ros Subscription and Map Updating ***/
@@ -117,6 +123,11 @@ export class AccountPage extends React.Component{
               val: this.state.benchID,
           },
           {
+              label: 'Old Location',
+              name: 'loc',
+              val: this.state.old_location,
+          },
+          {
               label: 'New Location',
               name: 'loc',
               val: this.state.location,
@@ -127,11 +138,11 @@ export class AccountPage extends React.Component{
     let map;
     if (this.state.realMap) {
       console.log("making real map");
-      map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches}  heatmap_data={heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={this.updateState} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} getCoords={this.getCoords} getHeatMap={this.getHeatMap} live={true} className="map"/>;
+      map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches}  heatmap_data={heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} oldLocHandler={this.handleOldLocationCallback} updateHandler={this.updateState} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} getCoords={this.getCoords} getHeatMap={this.getHeatMap} live={true} className="map"/>;
     } else {
       console.log("making fake map");
       console.log(fake_heatmap_data);
-      map = <Map parkBoundaries={fake_map_boundaries} benchData={fake_benches}  heatmap_data={fake_heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} center={[-3.197,55.941]} bounds={[[-3.1939,55.9427],[-3.2008,55.94]]} live={false} className="map"/>;
+      map = <Map parkBoundaries={fake_map_boundaries} benchData={fake_benches}  heatmap_data={fake_heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} oldLocHandler={this.handleOldLocationCallback} center={[-3.197,55.941]} bounds={[[-3.1939,55.9427],[-3.2008,55.94]]} live={false} className="map"/>;
     }
 
       return(

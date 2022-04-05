@@ -67,7 +67,7 @@ const Popup = ({ benchName, battery, inUse }) => (
  * live specifies if the map should update its data or remain static
  * @returns 
  */
-const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, center, bounds, updateHandler, getCoords, getHeatMap, live } ) => {
+const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, oldLocHandler, center, bounds, updateHandler, getCoords, getHeatMap, live } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
@@ -90,7 +90,13 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     // When a marker has been dragged, record its new location for the form
     function onDragEnd() {
       const lngLat = marker.getLngLat();
-      locHandler(lngLat)
+      locHandler(lngLat);
+    }
+
+    function onDragStart() {
+      console.log("starting");
+      const lngLat = marker.getLngLat();
+      oldLocHandler(lngLat);
     }
   
     // define a new marker object used to specify update bench positions
@@ -102,6 +108,7 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
       .addTo(map);
 
     marker.on('dragend', onDragEnd);
+    marker.on('dragstart', onDragStart);
 
     // add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
