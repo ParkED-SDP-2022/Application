@@ -72,7 +72,6 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
   const geojson = benchData; //TODO: could this use the getter function instead? to reduce params
-  //const heatmap_data = heatmapData;
 
   // initialize new map when component mounts
   useEffect(() => {

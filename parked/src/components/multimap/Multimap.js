@@ -31,7 +31,7 @@
   * live specifies if the map should update its data or remain static
   * @returns 
   */
- const Map = ( { parkBoundaries, benchData, locHandler, center, bounds, live, reset, handleReset } ) => {
+ const Map = ( { parkBoundaries, benchData, heatmap_data, locHandler, center, bounds, live, reset, handleReset } ) => {
    const mapContainerRef = useRef(null);
    const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
  
@@ -140,16 +140,100 @@
            "line-color": '#000',
            }
        });
+
+       console.log("heatmap data: " + heatmap_data);
+       // Add a heatmap layer to the map showing spots where benches get used
+       map.addSource('heatmap', {
+         'type': 'geojson',
+         'data': heatmap_data
+         });
+       map.addLayer({
+         'id': 'popularity_heatmap',
+         'type': 'heatmap',
+         'source': 'heatmap',
+         'layout': {
+           'visibility': 'none',
+         },
+         'paint': {
+           // Increase the heatmap weight based on frequency and property magnitude
+           //'heatmap-weight': ['interpolate',['linear'],['get', 'mag'],0,0,6,1],
+           'heatmap-radius': 45,
+           // Increase the heatmap color weight weight by zoom level
+           // heatmap-intensity is a multiplier on top of heatmap-weight
+           'heatmap-intensity': ['interpolate',['linear'],['zoom'],0,1,9,3],
+           'heatmap-weight': 0.3,
+           // Transition from heatmap to circle layer by zoom level
+           'heatmap-opacity': 0.7
+         }
+       },
+       'waterway-label'
+       );
+ 
      });
  
-     map.on('idle',function(){
-       map.resize()
-       });
-    
- 
-         // clean up on unmount
-         return () => map.remove();
-       }, [live, reset]);
+    // After the last frame rendered before the map enters an "idle" state.
+    map.on('load', () => {
+        console.log("creating hm button");
+        const id = 'popularity_heatmap';
+        const l_name = 'popularity_heatmap';
+  
+        // If these two layers were not added to the map, abort
+        if (!map.getLayer(id)) {
+            console.log("no layer");
+          return;
+        }
+        
+        if (document.getElementById(id)) {
+          // get elements
+          var child = document.getElementById(id);
+          var parent = document.getElementById("menu");
+  
+          // Delete child
+          parent.removeChild(child);
+        }
+        
+        // Create a link.
+        const link = document.createElement('a');
+        link.id = id;
+        link.href = '#';
+        link.textContent = 'Location Popularity';
+        link.className = '';
+        
+        // Show or hide layer when the toggle is clicked.
+        link.onclick = function (e) {
+          const clickedLayer = l_name;
+          e.preventDefault();
+          e.stopPropagation();
+          
+          const visibility = map.getLayoutProperty(
+          clickedLayer,
+          'visibility'
+          );
+          
+          // Toggle layer visibility by changing the layout object's visibility property.
+          if (visibility === 'visible') {
+            map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+            this.className = '';
+          } else {
+            this.className = 'active';
+            map.setLayoutProperty(
+              clickedLayer,
+              'visibility',
+              'visible'
+            );
+          }
+        };
+        
+        const layers = document.getElementById('menu');
+        layers.appendChild(link);
+        
+        });
+
+    // clean up on unmount
+    return () => map.remove();
+  }, [live]);
+
+
  
    return <div className="map-container" ref={mapContainerRef} />;
  };
