@@ -109,6 +109,8 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     
     // Add features and layers to the map when it loads
     map.on('load', () => {
+      updateHandler();
+      updateHandler();
       map.resize();
 
       map.loadImage(
@@ -225,6 +227,25 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
       map.resize()
       })
 
+<<<<<<< HEAD
+    if (live) {
+      //Update the bench source from the API every 2 seconds, to get the new gps positions
+      const updateSource = setInterval(async () => {
+        console.log("updating");
+        // Tell the arent to get new data
+        //updateHandler();
+        console.log("getting bench");
+        // Get and use the updated bench data
+        const benchCoords = getCoords();
+        map.getSource('benches').setData(benchCoords);
+        console.log("getting hm");
+        // get and update the heat map data
+        const heatmapData = getHeatMap();
+        console.log("retrieved heatmap: " + heatmapData.features);
+        map.getSource('heatmap').setData(heatmapData);
+        }, 2000);
+      }
+=======
     // if (live) {
     //   //Update the bench source from the API every 2 seconds, to get the new gps positions
     //   const updateSource = setInterval(async () => {
@@ -242,6 +263,7 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     //     map.getSource('heatmap').setData(heatmapData);
     //     }, 2000);
     //   }
+>>>>>>> 5ee5640edb0796b9cae1591ad93f4e2f69dcfea7
 
     // define map behaviour when clicked:
     // - popup appears if a bench marker is clicked on

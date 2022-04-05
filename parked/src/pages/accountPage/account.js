@@ -33,7 +33,7 @@ export class AccountPage extends React.Component{
     heatmap: {}
   }
 
-  // Setup the ros connection upon mounting
+  // Setup the ros connection upon mountings
   //TODO: unmount at the end?
   componentDidMount() {
     this.ros = new RosConnection();
@@ -52,7 +52,6 @@ export class AccountPage extends React.Component{
   handleNewLocationCallback = (loc) =>{
     this.setState({location: loc});
   }
-
   
   /*** Ros Subscription and Map Updating ***/
 
@@ -65,14 +64,18 @@ export class AccountPage extends React.Component{
 
   // The callback for a ros subscriber which gets updated bench coordinates
   handleBenchCoordsCallback = (data) =>{
-    this.setState({benchcoords: JSON.parse(data)});
-    this.ros.benchlocs.unsubscribe();
+    console.log("callback for benchcoords: " + data.data);
+    this.setState({benchcoords: JSON.parse(data.data)});
+    //this.ros.benchlocs.unsubscribe();
   }
   
   // The callback for a ros subscription which gets updated heatmap points
   handleHeatmapCallback = (data) =>{
-    this.setState({heatmap: JSON.parse(data)});
-    this.ros.heatmap.unsubscribe();
+    console.log("calling back heatmap");
+    console.log(data.data);
+    this.setState({heatmap: JSON.parse(data.data)});
+    //this.ros.heatmap.unsubscribe();
+    console.log(this.state.heatmap);
   }
 
   // method which allows Map component to recieve updated states

@@ -20,7 +20,8 @@ export default class Form extends React.Component{
     // When the component is taken out of DOM, we should cancel the connection in this lifecycle method
     componentWillUnmount() {}
 
-    handleInstruction() {
+    handleInstruction(e) {
+        e.preventDefault();
         //console.log('props')
         //console.log(this.props)
         const long = this.props.loc.lng;

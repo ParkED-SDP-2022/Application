@@ -41,6 +41,7 @@ class RosConnection {
         this.initTeleopKeyboard();
         this.initOdomTopic();
         this.initGPSTopic();
+        this.initHeatmapTopic();
 
     }
     
@@ -132,6 +133,7 @@ class RosConnection {
 
     initGPSTopic(){
       // Init topic object
+      console.log("Initilising topic");
       this.benchlocs = new this.ROSLIBR.Topic({
         ros: this.ros,
         name: '/bench_state_data',
