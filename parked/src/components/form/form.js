@@ -55,7 +55,8 @@ export default class Form extends React.Component{
         // };
         return (
             <>
-            <h2>Move a Bench:</h2>
+            <h2>Move Your Benches:</h2>
+            <h4>Drag and drop benches in the desired new locations, then submit your completed formation.</h4>
             <form className="FormInputs">
                 {this.props.content.inputs.map((input,key) => {
                     return (
