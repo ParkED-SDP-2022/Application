@@ -202,14 +202,34 @@ $coral: rgba(255, 131, 96, 1);
     }
 }
 
+button {
+    border: none;
+}
+
+// .map-menu {
+//     position: relative;
+//     width: 60vw;
+// }
+
 .menu {
 background: $gunmetal;
-position: fixed;
+position: absolute;
 z-index: 1;
 margin: 3vh;
 -moz-box-shadow:    0 0 15px 5px rgba(0, 0, 0, 0.2);
 -webkit-box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.2);
 box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.2);
+}
+
+.menu-left {
+    //margin-left: 55vh;
+    right: 0;
+}
+
+@media only screen and (max-width: 900px) {
+    .menu-left {
+        right: 3vh;
+    }
 }
     
 .menu a {

@@ -6,8 +6,8 @@ import real_map_boundaries from "../../assets/map/demo2_map.geojson";
 import real_benches from "../../assets/map/demo2_benches.json";
 import fake_map_boundaries from "../../assets/map/test.geojson";
 import fake_benches from "../../assets/map/benches.json";
-import heatmap_data from '../../assets/map/data.geojson';
-import fake_heatmap_data from '../../assets/map/fake_data.geojson';
+import heatmap_data from '../../assets/map/data.json';
+import fake_heatmap_data from '../../assets/map/fake_data.json';
 
 // Components
 import Map from "../../components/map/Map";
@@ -26,7 +26,7 @@ export class AccountPage extends React.Component{
   
   // The page state which tracks data for sharing with child components
   state = {
-    realMap: true,
+    realMap: false,
     benchID: "",
     location: "",
     benchcoords: {},
@@ -94,8 +94,10 @@ export class AccountPage extends React.Component{
     console.log("Handling")
     if (this.state.realMap == true) {
       this.setState({realMap: false});
+      this.setState({heatmap: fake_heatmap_data});
     } else {
       this.setState({realMap: true});
+      this.setState({heatmap: heatmap_data});
     }
   }
 
@@ -108,17 +110,20 @@ export class AccountPage extends React.Component{
     let map;
     if (this.state.realMap) {
       console.log("making real map");
-      map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches}  heatmapData={heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={this.updateState} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} getCoords={this.getCoords} getHeatMap={this.getHeatMap} live={true} className="map"/>;
+      map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches}  heatmap_data={heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} updateHandler={this.updateState} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} getCoords={this.getCoords} getHeatMap={this.getHeatMap} live={true} className="map"/>;
     } else {
       console.log("making fake map");
-      map = <Map parkBoundaries={fake_map_boundaries} benchData={fake_benches}  heatmapData={fake_heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} center={[-3.197,55.941]} bounds={[[-3.1939,55.9427],[-3.2008,55.94]]} live={false} className="map"/>;
+      console.log(fake_heatmap_data);
+      map = <Map parkBoundaries={fake_map_boundaries} benchData={fake_benches}  heatmap_data={fake_heatmap_data} IDhandler={this.handleIDCallback} locHandler={this.handleNewLocationCallback} center={[-3.197,55.941]} bounds={[[-3.1939,55.9427],[-3.2008,55.94]]} live={false} className="map"/>;
     }
 
       return(
           <div className='AccountPage'>
-          <nav className="menu"></nav>
-          <button className="menu" onClick={this.handleLive}>Live Map</button>
               <div className='MapSide'>
+                <div className="map-menu" id="menu-parent">
+                  <nav className="menu" id="menu"></nav>
+                  <nav className="menu menu-left" onClick={this.handleLive}><a id="live-map" href="#">Live Map</a></nav>
+                </div>
                 { map } 
               </div>
             

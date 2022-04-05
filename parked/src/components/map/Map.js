@@ -28,7 +28,6 @@ import './map.scss';
 import redMarkerImg from '../../assets/map/red marker 2.png';
 import greenMarkerImg from '../../assets/map/green marker 2.png';
 import blueMarkerImg from '../../assets/map/blue marker.png';
-import heatmap_data from '../../assets/map/fake_data.geojson';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
@@ -69,7 +68,7 @@ const Popup = ({ benchName, battery, inUse }) => (
  * live specifies if the map should update its data or remain static
  * @returns 
  */
-const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, center, bounds, updateHandler, getCoords, getHeatMap, live } ) => {
+const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, center, bounds, updateHandler, getCoords, getHeatMap, live } ) => {
   const mapContainerRef = useRef(null);
   const popUpRef = useRef(new mapboxgl.Popup({ offset: 15 }))
 
@@ -164,6 +163,7 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
           }
       });
 
+      console.log("heatmap data: " + heatmap_data);
       // Add a heatmap layer to the map showing spots where benches get used
       map.addSource('heatmap', {
         'type': 'geojson',
@@ -225,23 +225,23 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
       map.resize()
       })
 
-    if (live) {
-      //Update the bench source from the API every 2 seconds, to get the new gps positions
-      const updateSource = setInterval(async () => {
-        console.log("updating");
-        // Tell the arent to get new data
-        updateHandler();
-        console.log("getting bench");
-        // Get and use the updated bench data
-        const benchCoords = getCoords();
-        map.getSource('benches').setData(benchCoords);
-        console.log("getting hm");
-        // get and update the heat map data
-        const heatmapData = getHeatMap();
-        console.log("retrieved heatmap: " + heatmapData.features);
-        map.getSource('heatmap').setData(heatmapData);
-        }, 2000);
-      }
+    // if (live) {
+    //   //Update the bench source from the API every 2 seconds, to get the new gps positions
+    //   const updateSource = setInterval(async () => {
+    //     console.log("updating");
+    //     // Tell the arent to get new data
+    //     updateHandler();
+    //     console.log("getting bench");
+    //     // Get and use the updated bench data
+    //     const benchCoords = getCoords();
+    //     map.getSource('benches').setData(benchCoords);
+    //     console.log("getting hm");
+    //     // get and update the heat map data
+    //     const heatmapData = getHeatMap();
+    //     console.log("retrieved heatmap: " + heatmapData.features);
+    //     map.getSource('heatmap').setData(heatmapData);
+    //     }, 2000);
+    //   }
 
     // define map behaviour when clicked:
     // - popup appears if a bench marker is clicked on
@@ -271,8 +271,10 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
     });
 
     // After the last frame rendered before the map enters an "idle" state.
-    map.on('idle', () => {
+    map.on('load', () => {
+      console.log("creating hm button");
       const id = 'popularity_heatmap';
+      const l_name = 'popularity_heatmap';
 
       // If these two layers were not added to the map, abort
       if (!map.getLayer(id)) {
@@ -280,7 +282,12 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
       }
       
       if (document.getElementById(id)) {
-        return;
+        // get elements
+        var child = document.getElementById(id);
+        var parent = document.getElementById("menu");
+
+        // Delete child
+        parent.removeChild(child);
       }
       
       // Create a link.
@@ -292,7 +299,7 @@ const Map = ( { parkBoundaries, benchData, heatmapData, IDhandler, locHandler, c
       
       // Show or hide layer when the toggle is clicked.
       link.onclick = function (e) {
-        const clickedLayer = this.id;
+        const clickedLayer = l_name;
         e.preventDefault();
         e.stopPropagation();
         
