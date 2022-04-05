@@ -226,6 +226,12 @@ box-shadow:         0 0 15px 5px rgba(0, 0, 0, 0.2);
     right: 0;
 }
 
+.menu-bottom {
+    //margin-left: 55vh;
+    left: 0;
+    bottom: 0;
+}
+
 @media only screen and (max-width: 900px) {
     .menu-left {
         right: 3vh;
