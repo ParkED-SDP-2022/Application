@@ -66,7 +66,7 @@ export function About() {
               <div className="aboutText c1">
                 <h2>What We Do:</h2>
                 <p>Our benches are designed so that we can optimise people's use of park benches by ensuring benches can be located in the most in-demand locales. However their value can extend to town squares, campuses, large fairs and expos.</p>
-                <p>Our mobile benches can be programmed to move to set locations around the park where ther is more need. For example:
+                <p>Our mobile benches can be programmed to move to set locations around the park where there is more need. For example:
                 </p>
                   <ul>
                     <li>In summer benches may be placed in the sun</li>
@@ -83,8 +83,8 @@ export function About() {
                 <p>ParkED benches can help you make the best use of your infrastructure by helping you identify key areas in which bench demand is increased.</p>
                 <p>We achieve this by keeping track of how much time each bench is in use in any location, using a pressure sesnor mounted on the bench to detect people sitting on it.</p>
                 <p>This data can be visualised to show hotspots around the park where benches are sat on the most. It can also be filtered by time to show the difference in sitting trends - for example, on different days of the week.</p>
-                <p>This can ensure you don't have too many benches in places where they won't be used, and allows you to meet demand for benches in areas of most interest! We hop this will make parks more useful and engaging for park-goers, while reducing dangerous physical labour for park-workers.</p>
-                <p>On a larger scale, the data our systems collect across parks and bench-fleets will help identify which parks are doing well, so councils can plan and fund the necessary features to improve less used parks. It will also help map park-usage trends over time so that this can be factored into park opening hours, or organised even timings in future.</p>
+                <p>This can ensure you don't have too many benches in places where they won't be used, and allows you to meet demand for benches in areas of most interest! We hope this will make parks more useful and engaging for park-goers, while reducing dangerous physical labour for park-workers.</p>
+                <p>On a larger scale, the data our systems collect across parks and bench-fleets will help identify which parks are doing well, so councils can plan and fund the necessary features to improve less used parks. It will also help map park-usage trends over time so that this can be factored into park opening hours, or organised event timings in future.</p>
                 <p>We have made an effort to ensure our benches do not impact public privacy, so the data collected will be purely anonymised data from our pressure sensors. However, we need to consider the impact of our data collection as an antisocial design mechanism, for example tracking benches being slept on over night and using this to prevent such sleeping. For this reason, we would restrict the hours our benches collect data at.</p>
               </div>
             
