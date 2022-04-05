@@ -61,6 +61,8 @@ export class MultiPage extends React.Component{
     console.log("Resetting Pins");
     console.log(this.state.reset);
     this.setState({reset: !this.state.reset});
+    this.setState({locations: []});
+    this.setState({benches_set: []});
   }
 
 
