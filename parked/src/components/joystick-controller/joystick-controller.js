@@ -19,7 +19,7 @@ export class JoystickController extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      showJoyStick: true
+      showJoyStick: false
     }
 
     // this.initialize = this.initialize.bind(this);
@@ -83,7 +83,7 @@ export class JoystickController extends React.Component{
   }
 
   toggleJoystick() {
-    this.setState({showJoyStick: !this.state.showJoyStick});
+    this.setState({showJoyStick: false});
     console.log(this.state)
   }
 

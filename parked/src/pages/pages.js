@@ -81,7 +81,7 @@ export function About() {
               <div className="aboutText c2">
                 <h2>ParkED Data Collection:</h2>
                 <p>ParkED benches can help you make the best use of your infrastructure by helping you identify key areas in which bench demand is increased.</p>
-                <p>We achieve this by keeping track of how much time each bench is in use in any location, using a pressure sesnor mounted on the bench to detect people sitting on it.</p>
+                <p>We achieve this by keeping track of how much time each bench is in use in any location, using a pressure sensor mounted on the bench to detect people sitting on it.</p>
                 <p>This data can be visualised to show hotspots around the park where benches are sat on the most. It can also be filtered by time to show the difference in sitting trends - for example, on different days of the week.</p>
                 <p>This can ensure you don't have too many benches in places where they won't be used, and allows you to meet demand for benches in areas of most interest! We hope this will make parks more useful and engaging for park-goers, while reducing dangerous physical labour for park-workers.</p>
                 <p>On a larger scale, the data our systems collect across parks and bench-fleets will help identify which parks are doing well, so councils can plan and fund the necessary features to improve less used parks. It will also help map park-usage trends over time so that this can be factored into park opening hours, or organised event timings in future.</p>
