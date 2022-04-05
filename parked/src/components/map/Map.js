@@ -27,7 +27,6 @@ import ReactDOM from 'react-dom';
 import './map.scss';
 import redMarkerImg from '../../assets/map/red marker 2.png';
 import greenMarkerImg from '../../assets/map/green marker 2.png';
-import blueMarkerImg from '../../assets/map/blue marker.png';
 
 mapboxgl.accessToken = 'pk.eyJ1IjoiZW1pbHlvaWciLCJhIjoiY2t6NXRxN3NpMDJnYjJxbXBzMTRzdDU1MSJ9.NHGShZvAfR27RnylGIP0mA';
 
@@ -109,8 +108,10 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     
     // Add features and layers to the map when it loads
     map.on('load', () => {
-      updateHandler();
-      updateHandler();
+      console.log("loading");
+      if (live){
+        updateHandler();
+      }
       map.resize();
 
       map.loadImage(
@@ -131,15 +132,7 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
           map.addImage('green marker', image);
         });
 
-        map.loadImage(
-          blueMarkerImg,
-          (error, image) => {
-            if (error) throw error;
-  
-            // Add the image to the map style.
-            map.addImage('blue marker', image);
-          });
-
+      console.log("loaded park: " + parkBoundaries);
       // Add a source with the park boundaries (includes a shaded area and solid outline)
       map.addSource('park', {
         'type': 'geojson',
