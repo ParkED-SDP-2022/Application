@@ -61,8 +61,6 @@ export class MultiPage extends React.Component{
     console.log("Resetting Pins");
     console.log(this.state.reset);
     this.setState({reset: !this.state.reset});
-    this.setState({locations: []});
-    this.setState({benches_set: []});
   }
 
 
@@ -70,9 +68,9 @@ export class MultiPage extends React.Component{
     console.log(this.state.realMap);
     let map;
     if (this.state.realMap) {
-      map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches} locHandler={this.handleNewLocationCallback} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} live={true} reset={this.state.reset} className="map"/>;
+      map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches}  heatmap_data={heatmap_data} locHandler={this.handleNewLocationCallback} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} live={true} reset={this.state.reset} className="map"/>;
     } else {
-      map = <Map parkBoundaries={fake_map_boundaries} benchData={fake_benches} locHandler={this.handleNewLocationCallback} center={[-3.197,55.941]} bounds={[[-3.1939,55.9427],[-3.2008,55.94]]} live={false}  reset={this.state.reset} className="map"/>;
+      map = <Map parkBoundaries={fake_map_boundaries} benchData={fake_benches}  heatmap_data={fake_heatmap_data}  locHandler={this.handleNewLocationCallback} center={[-3.197,55.941]} bounds={[[-3.1939,55.9427],[-3.2008,55.94]]} live={false}  reset={this.state.reset} className="map"/>;
     }
 
     var content = {
@@ -95,7 +93,8 @@ export class MultiPage extends React.Component{
           <div className='AccountPage'>
               <div className='MapSide'>
                 <div className="map-menu" id="menu-parent">
-                  <nav className="menu" onClick={this.handleReset}><a id="live-map" href="#">Reset Locations</a></nav>
+                  <nav className="menu" id="menu"></nav>
+                  <nav className="menu menu-bottom" onClick={this.handleReset}><a id="reset" href="#">Reset Locations</a></nav>
                   <nav className="menu menu-left" onClick={this.handleLive}><a id="live-map" href="#">Live Map</a></nav>
                 </div>
                 { map } 
