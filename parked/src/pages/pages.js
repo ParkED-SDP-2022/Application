@@ -107,7 +107,7 @@ export function About() {
                 <p>We have researched the feasibility of rolling out advertising campaigns on fleets of benches, and believe the results are very promising!</p>
                 <p>There already exists long standing advertising on public bins and bus stops and we think benches would be the perfect next step.</p>
                 <p>If LED screens were mounted to the sides of our benches, then rotating advertisements could be remotely loaded onto benches with little to no extra effort.</p>
-                <p>Such campaigns could cost a few pounds a day, making them appealing for advertisers and priofitable for park-owners and councils due to the minimal effort required to set them up.</p>
+                <p>Such campaigns could cost a few pounds a day, making them appealing for advertisers and profitable for park-owners and councils due to the minimal effort required to set them up.</p>
               </div>
             </div>
 
