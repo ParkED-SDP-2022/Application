@@ -11,7 +11,7 @@ import fake_heatmap_data from '../../assets/map/fake_data.json';
 
 // Components
 import Map from "../../components/multimap/Multimap";
-import Form from "../../components/form/form";
+import Form from "../../components/multiform/form";
 
 
 export class MultiPage extends React.Component{
@@ -103,7 +103,7 @@ export class MultiPage extends React.Component{
             <div className="cs-background" />
             <div className='ControlSide'>
                 <div className="MoveForm">
-                    <Form benchID={this.state.benchID} loc={this.state.location} content={ content }/>
+                    <Form locations={this.state.locations} content={ content }/>
                 </div>
             </div>
         </div>
