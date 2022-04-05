@@ -11,8 +11,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/about" element={<About />} />
-          <Route path="/account" element={<Account />}/>
-          <Route path="/multi" element={<Multi />}/>
+          <Route path="/account" element={<Multi />}/>
+          <Route path="/historical" element={<Account />}/>
           <Route path="*" element={<Whoops404 />}/>
       </Routes>
       </div>
