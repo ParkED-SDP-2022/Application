@@ -109,6 +109,20 @@ export class AccountPage extends React.Component{
 }
 
   render() {
+  var content = {
+      inputs: [
+          {
+              label: 'Bench Number',
+              name: 'bench_num',
+              val: this.state.benchID,
+          },
+          {
+              label: 'New Location',
+              name: 'loc',
+              val: this.state.location,
+          },
+      ],
+    };
     console.log(this.state.realMap);
     let map;
     if (this.state.realMap) {
@@ -133,7 +147,7 @@ export class AccountPage extends React.Component{
             <div className="cs-background" />
             <div className='ControlSide'>
                 <div className="MoveForm">
-                    <Form benchID={this.state.benchID} loc={this.state.location}/>
+                    <Form benchID={this.state.benchID} loc={this.state.location} content={content}/>
                 </div>
                 <div className="Joystick">
                   <JoystickController/>
