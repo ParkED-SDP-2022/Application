@@ -39,25 +39,25 @@ export default class Form extends React.Component{
 
     render() {
         //console.log(this.props)
-        var content = {
-            inputs: [
-                {
-                    label: 'Bench Number',
-                    name: 'bench_num',
-                    val: this.props.benchID,
-                },
-                {
-                    label: 'New Location',
-                    name: 'loc',
-                    val: this.props.loc,
-                },
-            ],
-        };
+        // var content = {
+        //     inputs: [
+        //         {
+        //             label: 'Bench Number',
+        //             name: 'bench_num',
+        //             val: this.props.benchID,
+        //         },
+        //         {
+        //             label: 'New Location',
+        //             name: 'loc',
+        //             val: this.props.loc,
+        //         },
+        //     ],
+        // };
         return (
             <>
             <h2>Move a Bench:</h2>
             <form className="FormInputs">
-                {content.inputs.map((input,key) => {
+                {this.props.content.inputs.map((input,key) => {
                     return (
                         <div key={key} className="form-group mw-100 mh-100">
                             <p>

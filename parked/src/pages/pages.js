@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./pages.scss";
 import { AccountPage } from "./accountPage/account";
+import { MultiPage } from "./multiPage/multi";
 import { Link, useLocation } from "react-router-dom";
 import 'font-awesome/css/font-awesome.min.css';
 
@@ -125,6 +126,15 @@ export function Account() {
             <AccountPage/>
         </div>
     )
+}
+
+export function Multi() {
+  return (
+      <div>
+          <Nav />
+          <MultiPage/>
+      </div>
+  )
 }
 
 export function Whoops404() {
