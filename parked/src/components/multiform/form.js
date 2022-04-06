@@ -26,13 +26,14 @@ export default class Form extends React.Component{
         var points_list = [];
         for (const i in this.props.locations){
             var point = {
-                long: this.props.locations[i].long,
+                long: this.props.locations[i].lng,
                 lat: this.props.locations[i].lat,
                 angle: -999,
             }
             points_list.push(point);
         }
-        console.log("instruction:" + points_list);
+        console.log(this.props.locations)
+        console.log("instruction:" + points_list[0]);
 
         //TODO: create this ros action
         this.ros.multiBenchSimulationAction(points_list);
@@ -42,7 +43,7 @@ export default class Form extends React.Component{
     render() {
         return (
             <>
-            <h2>Move a Bench:</h2>
+            <h2>Bench Formations (Beta version):</h2>
             <form className="FormInputs">
                 {this.props.content.inputs.map((input,key) => {
                     return (

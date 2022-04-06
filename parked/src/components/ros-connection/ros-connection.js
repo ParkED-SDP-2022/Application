@@ -34,7 +34,15 @@ class RosConnection {
           serverName : '/move_to_point',
           actionName : 'parked_custom_messages/MoveToPointAction'
         });
-        this.instructionAction = this.instructionAction.bind(this);
+      this.instructionAction = this.instructionAction.bind(this);
+      this.multiInstructionClient = new this.ROSLIBR.ActionClient({
+        ros : this.ros,
+        serverName : '/multi_robot_planning_sim',
+        actionName : 'parked_custom_msgs/MultiRobotPathAction'
+      });
+      this.multiBenchSimulationAction = this.multiBenchSimulationAction.bind(this);
+        
+
 
         // Initialise Topics
         this.initVelocityPublisher();
@@ -184,6 +192,40 @@ class RosConnection {
        
       goal.send();
     }
+    
+  multiBenchSimulationAction(dests) {
+      console.log('destinations')
+      console.log(dests)
+      var goal = new this.ROSLIBR.Goal({
+        actionClient: this.multiInstructionClient,
+        goalMessage: {
+          destination: dests
+        }
+      });
+      goal.on('feedback', function(feedback) {
+        console.log('Feedback: ' + feedback.sequence);
+      });
+
+      goal.on('result', function(result) {
+        console.log('Final Result: ' + result.sequence);
+      });
+
+      this.ros.on('connection', function() {
+        console.log('Connected to websocket server.');
+      });
+
+      this.ros.on('error', function(error) {
+        console.log('Error connecting to websocket server: ', error);
+      });
+      
+      this.ros.on('close', function() {
+        console.log('Connection to websocket server closed.');
+      });
+       
+      goal.send();
+
+
+  }
 }
 
 
