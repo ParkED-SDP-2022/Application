@@ -93,7 +93,6 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     }
 
     function onDragStart() {
-      console.log("starting");
       const lngLat = marker.getLngLat();
       oldLocHandler(lngLat);
     }
@@ -114,7 +113,6 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     
     // Add features and layers to the map when it loads
     map.on('load', () => {
-      console.log("loading");
       if (live){
         updateHandler();
       }
@@ -138,7 +136,6 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
           map.addImage('green marker', image);
         });
 
-      console.log("loaded park: " + parkBoundaries);
       // Add a source with the park boundaries (includes a shaded area and solid outline)
       map.addSource('park', {
         'type': 'geojson',
@@ -164,7 +161,6 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
           }
       });
 
-      console.log("heatmap data: " + heatmap_data);
       // Add a heatmap layer to the map showing spots where benches get used
       map.addSource('heatmap', {
         'type': 'geojson',
@@ -229,17 +225,14 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
     if (live) {
       //Update the bench source from the API every 2 seconds, to get the new gps positions
       const updateSource = setInterval(async () => {
-        console.log("updating");
+        // console.log("updating");
         // Tell the arent to get new data
         //updateHandler();
-        console.log("getting bench");
         // Get and use the updated bench data
         const benchCoords = getCoords();
         map.getSource('benches').setData(benchCoords);
-        console.log("getting hm");
         // get and update the heat map data
         const heatmapData = getHeatMap();
-        console.log("retrieved heatmap: " + heatmapData.features);
         map.getSource('heatmap').setData(heatmapData);
         }, 2000);
       }
@@ -273,7 +266,6 @@ const Map = ( { parkBoundaries, benchData, heatmap_data, IDhandler, locHandler, 
 
     // After the last frame rendered before the map enters an "idle" state.
     map.on('load', () => {
-      console.log("creating hm button");
       const id = 'popularity_heatmap';
       const l_name = 'popularity_heatmap';
 

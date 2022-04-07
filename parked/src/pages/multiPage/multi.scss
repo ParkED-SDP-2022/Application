@@ -50,6 +50,7 @@ $coral: rgba(255, 131, 96, 1);
 .MoveForm {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
     background-color: $cultured;
     color: $gunmetal;
     width: 30vw;
@@ -71,6 +72,7 @@ $coral: rgba(255, 131, 96, 1);
 .FormInputs {
     display: flex;
     flex-direction: column;
+    flex-wrap: wrap;
 }
 
 .MoveForm .label {

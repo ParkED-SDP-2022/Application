@@ -51,11 +51,7 @@
  
      map.fitBounds(bounds);
 
-     console.log(benchData.features)
-
      for (const f in benchData.features) {
-         console.log("f:" + benchData.features[f]);
-         console.log(benchData.features[f].geometry.coordinates);
         // When a marker has been dragged, record its new location for the form
         function onDragEnd() {
             const lngLat = markerA.getLngLat();
@@ -141,7 +137,7 @@
            }
        });
 
-       console.log("heatmap data: " + heatmap_data);
+      //  console.log("heatmap data: " + heatmap_data);
        // Add a heatmap layer to the map showing spots where benches get used
        map.addSource('heatmap', {
          'type': 'geojson',
@@ -173,13 +169,11 @@
  
     // After the last frame rendered before the map enters an "idle" state.
     map.on('load', () => {
-        console.log("creating hm button");
         const id = 'popularity_heatmap';
         const l_name = 'popularity_heatmap';
   
         // If these two layers were not added to the map, abort
         if (!map.getLayer(id)) {
-            console.log("no layer");
           return;
         }
         
@@ -231,7 +225,7 @@
 
     // clean up on unmount
     return () => map.remove();
-  }, [live]);
+  }, [live, reset]);
 
 
  

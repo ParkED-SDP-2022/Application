@@ -42,30 +42,31 @@ export class MultiPage extends React.Component{
     }
     this.setState({locations: [...this.state.locations, loc],
       benches_set: [...this.state.benches_set, id]});
-    console.log(this.state);
   }
 
 
   /*** Render a different map depending on need ***/
 
   handleLive() {
-    console.log("Swapping Map")
     if (this.state.realMap == true) {
       this.setState({realMap: false});
+      this.setState({locations: []});
+      this.setState({benches_set: []});
     } else {
       this.setState({realMap: true});
+      this.setState({locations: []});
+      this.setState({benches_set: []});
     }
   }
 
   handleReset() {
-    console.log("Resetting Pins");
-    console.log(this.state.reset);
     this.setState({reset: !this.state.reset});
+    this.setState({locations: []});
+    this.setState({benches_set: []});
   }
 
 
   render() {
-    console.log(this.state.realMap);
     let map;
     if (this.state.realMap) {
       map = <Map parkBoundaries={real_map_boundaries} benchData={real_benches}  heatmap_data={heatmap_data} locHandler={this.handleNewLocationCallback} center={[0.51,0.61]} bounds={[[-0.1044,	-0.1923],[1.4171,	1.3085]]} live={true} reset={this.state.reset} className="map"/>;
@@ -79,8 +80,6 @@ export class MultiPage extends React.Component{
 
       var i = 0;
       for (const b in this.state.locations) {
-        console.log(this.state.locations);
-        console.log(b);
         content.inputs.push({
           label: 'Bench ' + this.state.benches_set[i],
           name: 'loc',
